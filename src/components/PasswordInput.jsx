@@ -17,12 +17,6 @@ const PasswordInput = ({name, control, placeholder, error}) => {
         }
     };
 
-    const getBackgroundColor = (value, isFocused) => {
-        if (isFocused) {
-            return 'rgba(0, 191, 255, 0.1)';
-        }
-    };
-
     const toggleSecureTextEntry = () => {
         setSecureTextEntry(prev => !prev);
     };
@@ -46,7 +40,10 @@ const PasswordInput = ({name, control, placeholder, error}) => {
                             fontFamily={"PoppinsRegular"}
                             fontSize={"$5"}
                             size={"$5"}
-                            backgroundColor={getBackgroundColor(value, isFocused)}
+                            focusStyle={{
+                                borderColor: "dodgerblue",
+                                backgroundColor: 'rgba(0, 191, 255, 0.05)'
+                            }}
                             borderRadius={"$5"}
                             borderColor={"white"}
                             paddingLeft={"$9"}

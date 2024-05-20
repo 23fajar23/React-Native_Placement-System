@@ -16,12 +16,6 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
         }
     };
 
-    const getBackgroundColor = (value, isFocused) => {
-        if (isFocused) {
-            return 'rgba(0, 191, 255, 0.1)';
-        }
-    };
-
     return (
         <Controller
             name={name}
@@ -40,7 +34,10 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                             fontFamily={"PoppinsRegular"}
                             fontSize={"$5"}
                             size={"$5"}
-                            backgroundColor={getBackgroundColor(value, isFocused)}
+                            focusStyle={{
+                                borderColor: "dodgerblue",
+                                backgroundColor: 'rgba(0, 191, 255, 0.05)'
+                            }}
                             borderRadius={"$5"}
                             borderColor={"white"}
                             paddingLeft={"$9"}
@@ -51,7 +48,9 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                                 onBlur()
                                 setIsFocused(false)
                             }}
-                            onFocus={() => setIsFocused(true)}
+                            onFocus={() => {
+                                setIsFocused(true)
+                            }}
                             value={value}/>
                     </XStack>
                     {error && (

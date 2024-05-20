@@ -1,4 +1,4 @@
-import {Button, Card, Checkbox, Image, Input, Label, SizableText, XStack, YStack} from "tamagui";
+import {Button, Checkbox, Image, Label, Separator, SizableText, XStack, YStack} from "tamagui";
 import {FontAwesome6} from "@expo/vector-icons";
 import {TouchableOpacity} from "react-native";
 import Icon from '../../assets/icon.png'
@@ -41,7 +41,8 @@ const LoginScreen = () => {
     };
 
     return (
-        <YStack flex={1} justifyContent={'space-between'} alignItems={'center'} padding={"$5"}>
+        <YStack flex={1} backgroundColor={"white"} justifyContent={'space-between'} alignItems={'center'}
+                padding={"$5"}>
             <YStack width={"40%"} aspectRatio={1}>
                 <Image source={Icon} width={'100%'} height={'100%'}/>
             </YStack>
@@ -54,13 +55,13 @@ const LoginScreen = () => {
                         name={"email"}
                         control={control}
                         icon={"envelope"}
-                        placeholder={"Masukkan Email"}
+                        placeholder={"Email"}
                         error={errors.email}
                     />
                     <PasswordInput
                         name={"password"}
                         control={control}
-                        placeholder={"Masukkan Password"}
+                        placeholder={"Password"}
                         error={errors.password}
                     />
                 </YStack>
@@ -90,7 +91,7 @@ const LoginScreen = () => {
 
             <YStack alignItems={"center"} gap={"$5"}>
                 <XStack alignItems={"center"}>
-                    <XStack flex={1} height={2} backgroundColor={"lightgray"}/>
+                    <Separator marginVertical={"$5"} borderWidth={"$0.5"}/>
                     <SizableText
                         textAlign={"center"}
                         marginHorizontal={"$3"}
@@ -99,7 +100,7 @@ const LoginScreen = () => {
                         color={"gray"}>
                         atau lanjutkan dengan
                     </SizableText>
-                    <XStack flex={1} height={2} backgroundColor={"lightgray"}/>
+                    <Separator marginVertical={"$5"} borderWidth={"$0.5"}/>
                 </XStack>
                 <XStack gap={"$3"}>
                     <IconCard icon={"facebook"}/>
@@ -108,12 +109,12 @@ const LoginScreen = () => {
                 </XStack>
             </YStack>
 
-            <XStack gap={"$1"} alignSelf={"center"}>
+            <XStack alignSelf={"center"}>
                 <SizableText
                     style={{fontFamily: 'PoppinsRegular'}}
                     size={"$5"}
                     color={"lightgray"}>
-                    Belum punya akun?
+                    Belum punya akun?{"  "}
                 </SizableText>
                 <TouchableOpacity>
                     <SizableText

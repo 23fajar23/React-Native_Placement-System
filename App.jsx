@@ -18,6 +18,8 @@ SplashScreen.preventAutoHideAsync();
 
 function App() {
     const [fontsLoaded, fontError] = useFonts({
+        Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
+        InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
         PoppinsRegular, PoppinsLight, PoppinsBold
     });
 
