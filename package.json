@@ -9,13 +9,25 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/poppins": "^0.2.3",
+    "@expo/vector-icons": "^14.0.2",
+    "@hookform/resolvers": "^3.4.0",
+    "@tamagui/config": "^1.98.1",
     "expo": "~51.0.8",
+    "expo-font": "^12.0.5",
+    "expo-splash-screen": "^0.27.4",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",
-    "react-native": "0.74.1"
+    "react-hook-form": "^7.51.4",
+    "react-native": "0.74.1",
+    "tamagui": "^1.98.1",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
+  },
+  "overrides": {
+    "react": "18.2.0"
   },
   "private": true
 }
