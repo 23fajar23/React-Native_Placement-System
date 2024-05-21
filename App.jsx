@@ -10,7 +10,8 @@ import {
     Poppins_300Light as PoppinsLight
 } from "@expo-google-fonts/poppins";
 import {useFonts} from "expo-font";
-import RegisterScreen from "./src/screens/RegisterScreen";
+import RegisterScreen from "./src/screens/auth/RegisterScreen";
+import AppNavigator from "./src/navigations/AppNavigator";
 
 const tamaguiConfig = createTamagui(config)
 
@@ -38,7 +39,7 @@ function App() {
             <Theme name={'light'}>
                 <YStack style={styles.container} onLayout={onLayoutRootView}>
                     <StatusBar style="light" translucent={false}/>
-                    <RegisterScreen/>
+                    <AppNavigator/>
                 </YStack>
             </Theme>
         </TamaguiProvider>
@@ -48,6 +49,7 @@ function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: "white",
     },
 });
 
