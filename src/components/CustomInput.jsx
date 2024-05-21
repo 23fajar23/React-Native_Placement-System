@@ -44,12 +44,14 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                             width={"100%"}
                             placeholder={placeholder}
                             onChangeText={onChange}
-                            onBlur={() => {
-                                onBlur()
+                            onBlur={(event) => {
+                                onBlur(event)
                                 setIsFocused(false)
+                                console.log('onBlur event fired');
                             }}
                             onFocus={() => {
                                 setIsFocused(true)
+                                console.log('onFocus event fired');
                             }}
                             value={value}/>
                     </XStack>

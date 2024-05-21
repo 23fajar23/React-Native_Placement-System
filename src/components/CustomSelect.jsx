@@ -1,15 +1,16 @@
 import {Select} from "@tamagui/select";
 import {Adapt, Separator, Sheet, SizableText, XStack, YStack} from "tamagui";
 import {useMemo, useState} from "react";
-import type {SelectProps} from 'tamagui'
 import {FontAwesome6} from "@expo/vector-icons";
 
-const CustomSelect = (props: SelectProps) => {
+const CustomSelect = ({leftIcon, placeholder, items}) => {
     const [val, setVal] = useState(null)
+
+    const selectedItem = items.find(item => item.id === val);
 
     return (
         <YStack>
-            <Select value={val} onValueChange={setVal} disablePreventBodyScroll {...props}>
+            <Select value={val} onValueChange={setVal} disablePreventBodyScroll>
                 <Select.Trigger
                     alignItems={"center"}
                     size={"$5"}
@@ -20,7 +21,7 @@ const CustomSelect = (props: SelectProps) => {
                     }>
                     <YStack position={"absolute"} zIndex={1} left={"$4"}>
                         <FontAwesome6
-                            name={"graduation-cap"}
+                            name={leftIcon}
                             size={16}
                             color={"grey"}
                             solid/>
@@ -29,8 +30,10 @@ const CustomSelect = (props: SelectProps) => {
                         left={"$5"}
                         size={"$5"}
                         style={{fontFamily: "PoppinsRegular"}}
-                        placeholder="Pilih Pendidikan Terakhir"
-                        color={"grey"}/>
+                        placeholder={placeholder}
+                        color={"grey"}>
+                        {selectedItem ? selectedItem.name : placeholder}
+                    </Select.Value>
                 </Select.Trigger>
 
                 <Adapt when="sm" platform="touch">
@@ -47,7 +50,7 @@ const CustomSelect = (props: SelectProps) => {
                                     alignSelf={"center"}
                                     style={{fontFamily: 'PoppinsBold'}}
                                     size={'$7'}>
-                                    Pilih Pendidikan Terakhir
+                                    {placeholder}
                                 </SizableText>
                             </YStack>
                             <Separator marginVertical={"$3"} marginHorizontal={"$5"} borderWidth={"$0.5"}/>
@@ -60,7 +63,7 @@ const CustomSelect = (props: SelectProps) => {
                     </Sheet>
                 </Adapt>
 
-                <Select.Content zIndex={200000}>
+                <Select.Content zIndex={9999}>
                     <Select.Viewport>
                         <Select.Group paddingHorizontal={"$5"} paddingVertical={"$3"} gap={"$3"}>
                             {useMemo(
@@ -73,11 +76,11 @@ const CustomSelect = (props: SelectProps) => {
                                                 padding={"$3"}
                                                 backgroundColor={"whitesmoke"}
                                                 borderWidth={"$0.5"}
-                                                borderColor={val === item.name ? "deepskyblue" : "white"}
+                                                borderColor={val === item.id ? "deepskyblue" : "white"}
                                                 borderRadius={"$5"}
                                                 index={i}
-                                                key={item.name}
-                                                value={item.name}>
+                                                key={item.id}
+                                                value={item.id}>
                                                 <Select.ItemText
                                                     alignSelf={"center"}
                                                     style={{
@@ -104,11 +107,5 @@ const CustomSelect = (props: SelectProps) => {
         </YStack>
     )
 }
-
-const items = [
-    {name: 'S1/D4'},
-    {name: 'D3'},
-    {name: 'SMA/SMK'},
-]
 
 export default CustomSelect

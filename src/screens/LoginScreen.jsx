@@ -1,7 +1,7 @@
 import {Button, Checkbox, Image, Label, Separator, SizableText, XStack, YStack} from "tamagui";
 import {FontAwesome6} from "@expo/vector-icons";
 import {TouchableOpacity} from "react-native";
-import Icon from '../../assets/icon.png'
+import Logo from '../../assets/logo.png'
 import IconCard from "../components/IconCard";
 import CustomInput from "../components/CustomInput";
 import * as yup from "yup";
@@ -41,10 +41,9 @@ const LoginScreen = () => {
     };
 
     return (
-        <YStack flex={1} backgroundColor={"white"} justifyContent={'space-between'} alignItems={'center'}
-                padding={"$5"}>
-            <YStack width={"40%"} aspectRatio={1}>
-                <Image source={Icon} width={'100%'} height={'100%'}/>
+        <YStack flex={1} justifyContent={'space-between'} alignItems={'center'} padding={"$5"}>
+            <YStack width={"25%"} aspectRatio={1} marginTop={"$3"}>
+                <Image source={Logo} width={'100%'} height={'100%'}/>
             </YStack>
 
             <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Masuk dengan akun Anda</SizableText>
@@ -89,7 +88,7 @@ const LoginScreen = () => {
                 </TouchableOpacity>
             </YStack>
 
-            <YStack alignItems={"center"} gap={"$5"}>
+            <YStack alignItems={"center"} gap={"$3"}>
                 <XStack alignItems={"center"}>
                     <Separator marginVertical={"$5"} borderWidth={"$0.5"}/>
                     <SizableText

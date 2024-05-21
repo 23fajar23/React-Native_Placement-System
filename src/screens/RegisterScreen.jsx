@@ -1,13 +1,14 @@
-import {Button, Checkbox, Image, SizableText, XStack, YStack} from "tamagui";
-import {FontAwesome6} from "@expo/vector-icons";
+import {Button, Image, ScrollView, SizableText, XStack, YStack} from "tamagui";
 import {TouchableOpacity} from "react-native";
-import Icon from '../../assets/icon.png'
+import Logo from '../../assets/logo.png'
 import CustomInput from "../components/CustomInput";
 import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import PasswordInput from "../components/PasswordInput";
 import CustomSelect from "../components/CustomSelect";
+import {educationalStatus} from "../dummys/educationalStatus";
+import {batches} from "../dummys/batches";
 
 const registerSchema = yup.object({
     name: yup
@@ -64,51 +65,63 @@ const RegisterScreen = () => {
     };
 
     return (
-        <YStack flex={1} justifyContent={'space-between'} alignItems={'center'} padding={"$5"}>
-            <YStack width={"40%"} aspectRatio={1}>
-                <Image source={Icon} width={'100%'} height={'100%'}/>
-            </YStack>
-
-            <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Buat Akun Baru</SizableText>
-
-            <YStack alignItems={"center"} width={"100%"} gap={"$3"}>
-                <YStack gap={"$3"}>
-                    <CustomInput
-                        name={"name"}
-                        control={control}
-                        icon={"user"}
-                        placeholder={"Nama Lengkap"}
-                        error={errors.name}
-                    />
-                    <CustomInput
-                        name={"mobilePhone"}
-                        control={control}
-                        icon={"phone"}
-                        placeholder={"Nomor Handphone"}
-                        error={errors.mobilePhone}
-                    />
-                    <CustomInput
-                        name={"email"}
-                        control={control}
-                        icon={"envelope"}
-                        placeholder={"Email"}
-                        error={errors.email}
-                    />
-                    <CustomInput
-                        name={"address"}
-                        control={control}
-                        icon={"location-dot"}
-                        placeholder={"Alamat"}
-                        error={errors.address}
-                    />
-                    <CustomSelect/>
-                    <PasswordInput
-                        name={"password"}
-                        control={control}
-                        placeholder={"Password"}
-                        error={errors.password}
-                    />
+        <ScrollView>
+            <YStack flex={1} gap={"$5"} alignItems={'center'} padding={"$5"}>
+                <YStack width={"25%"} aspectRatio={1} marginTop={"$3"}>
+                    <Image source={Logo} width={'100%'} height={'100%'}/>
                 </YStack>
+
+                <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Buat Akun Baru</SizableText>
+
+                <YStack alignItems={"center"} width={"100%"} gap={"$3"}>
+                    <YStack gap={"$3"}>
+                        <CustomInput
+                            name={"name"}
+                            control={control}
+                            icon={"user"}
+                            placeholder={"Nama Lengkap"}
+                            error={errors.name}
+                        />
+                        <CustomInput
+                            name={"mobilePhone"}
+                            control={control}
+                            icon={"phone"}
+                            placeholder={"Nomor Handphone"}
+                            error={errors.mobilePhone}
+                        />
+                        <CustomInput
+                            name={"email"}
+                            control={control}
+                            icon={"envelope"}
+                            placeholder={"Email"}
+                            error={errors.email}
+                        />
+                        <CustomInput
+                            name={"address"}
+                            control={control}
+                            icon={"location-dot"}
+                            placeholder={"Alamat"}
+                            error={errors.address}
+                        />
+                        <CustomSelect
+                            leftIcon={"graduation-cap"}
+                            placeholder={"Pilih Pendidikan Terakhir"}
+                            items={educationalStatus}
+                        />
+                        <CustomSelect
+                            leftIcon={"school"}
+                            placeholder={"Pilih Batch"}
+                            items={batches}
+                        />
+                        <PasswordInput
+                            name={"password"}
+                            control={control}
+                            placeholder={"Password"}
+                            error={errors.password}
+                        />
+                    </YStack>
+                </YStack>
+
                 <Button
                     style={{borderRadius: 999}}
                     size={'$5'}
@@ -116,32 +129,28 @@ const RegisterScreen = () => {
                     backgroundColor={"deepskyblue"}
                     color={"white"}
                     onPress={handleSubmit(onSubmit)}>
-                    <SizableText style={{fontFamily: 'PoppinsRegular'}} size={'$5'} color={"white"}>Masuk</SizableText>
+                    <SizableText style={{fontFamily: 'PoppinsRegular'}} size={'$5'}
+                                 color={"white"}>Daftar</SizableText>
                 </Button>
-                <TouchableOpacity>
-                    <SizableText style={{fontFamily: 'PoppinsRegular'}} size={'$5'} color={"deepskyblue"}>
-                        Lupa password?
-                    </SizableText>
-                </TouchableOpacity>
-            </YStack>
 
-            <XStack gap={"$1"} alignSelf={"center"}>
-                <SizableText
-                    style={{fontFamily: 'PoppinsRegular'}}
-                    size={"$5"}
-                    color={"lightgray"}>
-                    Belum punya akun?
-                </SizableText>
-                <TouchableOpacity>
+                <XStack gap={"$1"} alignSelf={"center"}>
                     <SizableText
                         style={{fontFamily: 'PoppinsRegular'}}
                         size={"$5"}
-                        color={"deepskyblue"}>
-                        Daftar
+                        color={"lightgray"}>
+                        Sudah memiliki akun?
                     </SizableText>
-                </TouchableOpacity>
-            </XStack>
-        </YStack>
+                    <TouchableOpacity>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsRegular'}}
+                            size={"$5"}
+                            color={"deepskyblue"}>
+                            Masuk
+                        </SizableText>
+                    </TouchableOpacity>
+                </XStack>
+            </YStack>
+        </ScrollView>
     )
 }
 
