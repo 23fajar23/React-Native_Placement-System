@@ -1,11 +1,11 @@
-import {Card, Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
-import {ActivityIndicator, FlatList, TouchableOpacity} from "react-native";
+import {Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
+import {FlatList, TouchableOpacity} from "react-native";
 import React, {useEffect, useState} from "react";
 import api from "../../services/ApiService";
 import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
-import LogoCard from "../LogoCard";
-import NoteChip from "../NoteChip";
+import LogoCard from "../../components/LogoCard";
+import NoteChip from "../../components/NoteChip";
 
 const TestList = ({handlePressItem}) => {
     const [data, setData] = useState([]);
@@ -30,11 +30,10 @@ const TestList = ({handlePressItem}) => {
 
     const renderItem = ({item}) => (
             <>
-                <Text>{item.title}</Text>
+                <Text color={"white"}>{item.title}</Text>
                 <TouchableOpacity onPress={handlePressItem}>
-                    <Card
+                    <YStack
                         flex={1}
-                        flexDirection={"column"}
                         gap={"$3"}
                         padding={"$3"}
                         borderWidth={"$0.5"}
@@ -78,13 +77,25 @@ const TestList = ({handlePressItem}) => {
                                     Available : 14
                                 </SizableText>
                                 <XStack gap={"$2"}>
-                                    <NoteChip text={"28 Aug 2023"} color={"gray"}/>
-                                    <NoteChip text={"All"} color={"gray"}/>
-                                    <NoteChip text={"Min. S1"} color={"gray"}/>
+                                    <NoteChip
+                                        text={"28 Aug 2023"}
+                                        textColor={"gray"}
+                                        borderColor={"gray"}
+                                        backgroundColor={"white"}/>
+                                    <NoteChip
+                                        text={"All"}
+                                        textColor={"gray"}
+                                        borderColor={"gray"}
+                                        backgroundColor={"white"}/>
+                                    <NoteChip
+                                        text={"Min. S1"}
+                                        textColor={"gray"}
+                                        borderColor={"gray"}
+                                        backgroundColor={"white"}/>
                                 </XStack>
                             </YStack>
                         </XStack>
-                    </Card>
+                    </YStack>
                 </TouchableOpacity>
             </>
         )

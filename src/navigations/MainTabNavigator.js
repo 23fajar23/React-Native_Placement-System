@@ -3,7 +3,7 @@ import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import {Image, SizableText, YStack} from "tamagui";
-import ApplicationScreen from "../screens/ApplicationScreen";
+import ApplicationScreen from "../screens/application/ApplicationScreen";
 import Icon from "../../assets/icon.png";
 import {TouchableOpacity} from "react-native";
 import TestScreen from "../screens/test/TestScreen";
@@ -103,7 +103,30 @@ const MainTabNavigator = () => {
                     ),
                 }}
             />
-            <Tab.Screen name="Application" component={ApplicationScreen}/>
+            <Tab.Screen
+                name="Application"
+                component={ApplicationScreen}
+                options={{
+                    headerStyle: {
+                        shadowOpacity: 0,
+                        borderWidth: 0,
+                        elevation: 0,
+                        backgroundColor: "white",
+                    },
+                    headerLeft: () => (
+                        <YStack height={"80%"} aspectRatio={1} marginLeft={"$3"}>
+                            <Image source={Icon} width={'100%'} height={'100%'}/>
+                        </YStack>
+                    ),
+                    headerTitle: () => (
+                        <SizableText
+                            size={"$7"}
+                            style={{fontFamily: "PoppinsBold"}}>
+                            Applications
+                        </SizableText>
+                    ),
+                }}
+            />
             <Tab.Screen name="Profile" component={ProfileScreen}/>
         </Tab.Navigator>
     );

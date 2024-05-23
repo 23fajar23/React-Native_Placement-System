@@ -1,5 +1,5 @@
 import {YStack} from "tamagui";
-import TestList from "../../components/test/TestList";
+import TestList from "./TestList";
 
 const TestScreen = ({navigation}) => {
 

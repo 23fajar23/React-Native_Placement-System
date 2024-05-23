@@ -4,35 +4,29 @@ import {Image, SizableText, YStack} from "tamagui";
 import Icon from "../../assets/icon.png";
 import {TouchableOpacity} from "react-native";
 import {FontAwesome6} from "@expo/vector-icons";
+import ApplicationDetailScreen from "../screens/application/ApplicationDetailScreen";
 
-const TestStack = createNativeStackNavigator();
+const ApplicationStack = createNativeStackNavigator();
 
 const TestNavigator = () => {
     return (
-        <TestStack.Navigator>
-            <TestStack.Screen
-                name="DetailTest"
-                component={DetailTestScreen}
+        <ApplicationStack.Navigator>
+            <ApplicationStack.Screen
+                name="DetailApplication"
+                component={ApplicationDetailScreen}
                 options={{
+                    headerShadowVisible: false,
                     headerTitle: () => (
                         <SizableText
                             size={"$7"}
                             style={{fontFamily: "PoppinsBold"}}>
-                            Details
+                            Stages
                         </SizableText>
-                    ),
-                    headerShadowVisible: false,
-                    headerRight: () => (
-                        <YStack>
-                            <TouchableOpacity>
-                                <FontAwesome6 name={"bookmark"} size={24}/>
-                            </TouchableOpacity>
-                        </YStack>
                     ),
                 }}
             />
 
-        </TestStack.Navigator>
+        </ApplicationStack.Navigator>
     );
 };
 

@@ -1,16 +1,17 @@
 import {SizableText} from "tamagui";
 
-const NoteChip = ({text, color}) => {
+const NoteChip = ({text, textColor, backgroundColor, borderColor}) => {
     return (
         <SizableText
             style={{fontFamily: 'PoppinsRegular'}}
             paddingTop={"$1.5"}
-            paddingHorizontal={"$2"}
-            borderRadius={8}
+            paddingHorizontal={"$3"}
+            borderRadius={"$3"}
             borderWidth={"$0.5"}
-            borderColor={color}
-            size={'$3'}
-            color={color}>
+            size={'$2'}
+            backgroundColor={backgroundColor}
+            borderColor={borderColor}
+            color={textColor}>
             {text}
         </SizableText>
     )

@@ -4,6 +4,7 @@ import {useState} from "react";
 import MainTabNavigator from "./MainTabNavigator";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import TestNavigator from "./TestNavigator";
+import ApplicationNavigator from "./ApplicationNavigator";
 
 const AppStack = createNativeStackNavigator();
 
@@ -21,6 +22,11 @@ const AppNavigator = () => {
                 <AppStack.Screen
                     name={"TestNavigator"}
                     component={TestNavigator}
+                    options={{headerShown: false}}
+                />
+                <AppStack.Screen
+                    name={"ApplicationNavigator"}
+                    component={ApplicationNavigator}
                     options={{headerShown: false}}
                 />
             </AppStack.Navigator>

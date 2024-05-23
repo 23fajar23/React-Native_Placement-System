@@ -9,7 +9,7 @@ import CustomSheet from "../../components/CustomSheet";
 import {useState} from "react";
 import SecondaryButton from "../../components/button/SecondaryButton";
 import CustomToast from "../../components/CustomToast";
-import {ToastViewport, useToastController} from "@tamagui/toast";
+import {useToastController} from "@tamagui/toast";
 
 const DetailTestScreen = ({}) => {
     const [openSheet, setOpenSheet] = useState(false)
@@ -28,7 +28,7 @@ const DetailTestScreen = ({}) => {
                     flex={1}
                     backgroundColor={"white"}
                     paddingHorizontal={"$3"}
-                    paddingTop={"$1"}
+                    paddingTop={"$2"}
                     paddingBottom={"$3"}
                     gap={"$3"}>
                     <Card
@@ -48,12 +48,12 @@ const DetailTestScreen = ({}) => {
                             <SizableText
                                 style={{fontFamily: 'PoppinsRegular'}}
                                 size={'$5'}
-                                color={"gray"}>
+                                color={"deepskyblue"}>
                                 Role
                             </SizableText>
                         </YStack>
                         <Separator width={"100%"} borderWidth={"$0.5"}/>
-                        <YStack gap={"$1"} alignItems={"center"}>
+                        <YStack gap={"$2"} alignItems={"center"}>
                             <SizableText
                                 style={{fontFamily: 'PoppinsRegular'}}
                                 size={'$5'}
@@ -67,8 +67,16 @@ const DetailTestScreen = ({}) => {
                                 28 Aug 2024
                             </SizableText>
                             <XStack gap={"$2"}>
-                                <NoteChip text={"All"} color={"gray"}/>
-                                <NoteChip text={"Min. S1"} color={"gray"}/>
+                                <NoteChip
+                                    text={"All"}
+                                    textColor={"gray"}
+                                    borderColor={"gray"}
+                                    backgroundColor={"white"}/>
+                                <NoteChip
+                                    text={"Min. S1"}
+                                    textColor={"gray"}
+                                    borderColor={"gray"}
+                                    backgroundColor={"white"}/>
                             </XStack>
                         </YStack>
                     </Card>
