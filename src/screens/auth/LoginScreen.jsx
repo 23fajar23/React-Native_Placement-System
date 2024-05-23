@@ -1,4 +1,4 @@
-import {Button, Checkbox, Label, ScrollView, Separator, SizableText, XStack, YStack} from "tamagui";
+import {Checkbox, Label, ScrollView, Separator, SizableText, XStack, YStack} from "tamagui";
 import {FontAwesome6} from "@expo/vector-icons";
 import {TouchableOpacity} from "react-native";
 import Logo from '../../../assets/logo.png'
@@ -8,9 +8,9 @@ import * as yup from "yup";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import PasswordInput from "../../components/PasswordInput";
-import AuthHeader from "../../components/AuthHeader";
-import AuthFooter from "../../components/AuthFooter";
-import PrimaryButton from "../../components/PrimaryButton";
+import AuthHeader from "../../components/auth/AuthHeader";
+import AuthFooter from "../../components/auth/AuthFooter";
+import PrimaryButton from "../../components/button/PrimaryButton";
 
 const loginSchema = yup.object({
     email: yup
@@ -90,7 +90,7 @@ const LoginScreen = ({navigation}) => {
 
     return (
         <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
-            <YStack flex={1} backgroundColor={"white"} gap={"$7"} alignItems={'center'} padding={"$5"}>
+            <YStack flex={1} backgroundColor={"white"} gap={"$5"} alignItems={'center'} padding={"$3"}>
                 <AuthHeader logo={Logo} title={"Login to Your Account"}/>
 
                 <YStack alignItems={"center"} width={"100%"} gap={"$3"}>
@@ -117,7 +117,7 @@ const LoginScreen = ({navigation}) => {
 
                 <LoginAlternatives/>
 
-                <AuthFooter onPress={onClickRegister} text={"Login"}/>
+                <AuthFooter onPress={onClickRegister} text={"Sign Up"}/>
             </YStack>
         </ScrollView>
     )

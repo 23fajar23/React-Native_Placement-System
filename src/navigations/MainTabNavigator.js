@@ -1,10 +1,12 @@
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import TestScreen from "../screens/TestScreen";
-import {Ionicons} from "@expo/vector-icons";
-import {SizableText} from "tamagui";
+import {FontAwesome6, Ionicons} from "@expo/vector-icons";
+import {Image, SizableText, YStack} from "tamagui";
 import ApplicationScreen from "../screens/ApplicationScreen";
+import Icon from "../../assets/icon.png";
+import {TouchableOpacity} from "react-native";
+import TestScreen from "../screens/test/TestScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,9 +41,9 @@ const screenOptions = (route, focused) => {
         ),
         tabBarLabel: ({focused}) => (
             <SizableText
+                style={{fontFamily: focused ? "PoppinsBold" : "PoppinsRegular"}}
                 color={focused ? "deepskyblue" : "grey"}
-                size={"$1"}
-                fontFamily={"PoppinsRegular"}>
+                size={"$1"}>
                 {label}
             </SizableText>
         )
@@ -52,7 +54,6 @@ const MainTabNavigator = () => {
     return (
         <Tab.Navigator
             screenOptions={({route}) => ({
-                headerShown: false,
                 tabBarItemStyle: {
                     height: 44,
                     alignSelf: "center"
@@ -60,7 +61,8 @@ const MainTabNavigator = () => {
                 tabBarStyle: {
                     height: 56,
                     borderColor: "white",
-                    shadowColor: "white"
+                    shadowColor: "white",
+                    elevation: 0
                 },
                 tabBarIcon: ({focused, color, size}) =>
                     screenOptions(route, focused).tabBarIcon({size, color}),
@@ -70,7 +72,37 @@ const MainTabNavigator = () => {
                 tabBarInactiveTintColor: 'grey'
             })}>
             <Tab.Screen name="Home" component={HomeScreen}/>
-            <Tab.Screen name="Test" component={TestScreen}/>
+            <Tab.Screen
+                name="Test"
+                component={TestScreen}
+                options={{
+                    headerStyle: {
+                        shadowOpacity: 0,
+                        borderWidth: 0,
+                        elevation: 0,
+                        backgroundColor: "white",
+                    },
+                    headerLeft: () => (
+                        <YStack height={"80%"} aspectRatio={1} marginLeft={"$3"}>
+                            <Image source={Icon} width={'100%'} height={'100%'}/>
+                        </YStack>
+                    ),
+                    headerTitle: () => (
+                        <SizableText
+                            size={"$7"}
+                            style={{fontFamily: "PoppinsBold"}}>
+                            Placement Tests
+                        </SizableText>
+                    ),
+                    headerRight: () => (
+                        <YStack marginRight={"$5"}>
+                            <TouchableOpacity>
+                                <FontAwesome6 name={"bookmark"} size={24}/>
+                            </TouchableOpacity>
+                        </YStack>
+                    ),
+                }}
+            />
             <Tab.Screen name="Application" component={ApplicationScreen}/>
             <Tab.Screen name="Profile" component={ProfileScreen}/>
         </Tab.Navigator>

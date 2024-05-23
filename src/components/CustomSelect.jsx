@@ -1,8 +1,9 @@
 import {Select} from "@tamagui/select";
-import {Adapt, Separator, Sheet, SizableText, XStack, YStack} from "tamagui";
+import {Adapt, SizableText, YStack} from "tamagui";
 import {useMemo} from "react";
 import {FontAwesome6} from "@expo/vector-icons";
 import {Controller} from "react-hook-form";
+import CustomSheet from "./CustomSheet";
 
 const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
     return (
@@ -38,36 +39,12 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                         </Select.Trigger>
 
                         <Adapt when="sm" platform="touch">
-                            <Sheet
-                                modal
-                                dismissOnSnapToBottom
-                                animationConfig={false}
-                                snapPointsMode={"fit"}>
-                                <Sheet.Frame style={{borderTopStartRadius: 64, borderTopEndRadius: 64}}>
-                                    <YStack alignItems={"center"}>
-                                        <XStack marginVertical={"$3"} height={3} width={"$3"}
-                                                backgroundColor={"lightgray"}
-                                                borderRadius={"$9"}/>
-                                        <SizableText
-                                            alignSelf={"center"}
-                                            style={{fontFamily: 'PoppinsBold'}}
-                                            size={'$7'}>
-                                            {placeholder}
-                                        </SizableText>
-                                    </YStack>
-                                    <Separator marginVertical={"$3"} marginHorizontal={"$5"} borderWidth={"$0.5"}/>
-                                    <Adapt.Contents/>
-                                </Sheet.Frame>
-                                <Sheet.Overlay
-                                    enterStyle={{opacity: 0}}
-                                    exitStyle={{opacity: 0}}
-                                />
-                            </Sheet>
+                            <CustomSheet title={placeholder} content={<Adapt.Contents/>}/>
                         </Adapt>
 
                         <Select.Content zIndex={9999}>
                             <Select.Viewport>
-                                <Select.Group paddingHorizontal={"$5"} paddingVertical={"$3"} gap={"$3"}>
+                                <Select.Group padding={"$3"} gap={"$3"}>
                                     {useMemo(
                                         () =>
                                             items.map((item, i) => {
@@ -76,9 +53,9 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                                         alignItems={"center"}
                                                         width={"100%"}
                                                         padding={"$3"}
-                                                        backgroundColor={"whitesmoke"}
+                                                        backgroundColor={"white"}
                                                         borderWidth={"$0.5"}
-                                                        borderColor={value === item.id ? "deepskyblue" : "white"}
+                                                        borderColor={value === item.id ? "deepskyblue" : "lightgray"}
                                                         borderRadius={"$5"}
                                                         index={i}
                                                         key={item.id}
@@ -93,7 +70,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                                         </Select.ItemText>
                                                         <Select.ItemIndicator>
                                                             <FontAwesome6
-                                                                name={"circle-check"}
+                                                                name={"square-check"}
                                                                 size={16}
                                                                 color={"deepskyblue"}/>
                                                         </Select.ItemIndicator>

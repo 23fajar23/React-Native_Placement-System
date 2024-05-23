@@ -1,5 +1,4 @@
-import {Button, Image, ScrollView, SizableText, XStack, YStack} from "tamagui";
-import {TouchableOpacity} from "react-native";
+import {ScrollView, YStack} from "tamagui";
 import Logo from '../../../assets/logo.png'
 import CustomInput from "../../components/CustomInput";
 import * as yup from "yup";
@@ -9,9 +8,9 @@ import PasswordInput from "../../components/PasswordInput";
 import CustomSelect from "../../components/CustomSelect";
 import {educationalStatus} from "../../dummys/educationalStatus";
 import {batches} from "../../dummys/batches";
-import AuthHeader from "../../components/AuthHeader";
-import PrimaryButton from "../../components/PrimaryButton";
-import AuthFooter from "../../components/AuthFooter";
+import AuthHeader from "../../components/auth/AuthHeader";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import AuthFooter from "../../components/auth/AuthFooter";
 
 const registerSchema = yup.object({
     name: yup
@@ -130,12 +129,10 @@ const RegisterScreen = ({navigation}) => {
 
     return (
         <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
-            <YStack flex={1} backgroundColor={"white"} gap={"$7"} alignItems={'center'} padding={"$5"}>
+            <YStack flex={1} backgroundColor={"white"} gap={"$5"} alignItems={'center'} padding={"$3"}>
                 <AuthHeader logo={Logo} title={"Create New Account"}/>
 
-                <YStack alignItems={"center"} width={"100%"} gap={"$3"}>
-                    <InputFields control={control} errors={errors}/>
-                </YStack>
+                <InputFields control={control} errors={errors}/>
 
                 <PrimaryButton onPress={handleSubmit(onSubmit)} title={"Sign Up"}/>
 

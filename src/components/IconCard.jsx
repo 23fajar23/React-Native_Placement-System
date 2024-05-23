@@ -10,7 +10,7 @@ const IconCard = ({icon}) => {
                 paddingHorizontal={"$5"}
                 paddingVertical={"$3"}
                 backgroundColor={"white"}
-                borderRadius={20}
+                borderRadius={"$7"}
                 borderWidth={"$1"}>
                 <FontAwesome6 name={icon} size={16} color={"grey"}/>
             </Card>

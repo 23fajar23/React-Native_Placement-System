@@ -2,7 +2,7 @@ import {StatusBar} from 'expo-status-bar';
 import {StyleSheet} from 'react-native';
 import * as SplashScreen from "expo-splash-screen";
 import {useCallback} from "react";
-import {createTamagui, TamaguiProvider, Theme, YStack} from "tamagui";
+import {createTamagui, TamaguiProvider, YStack} from "tamagui";
 import {config} from '@tamagui/config/v3'
 import {
     Poppins_700Bold as PoppinsBold,
@@ -10,8 +10,9 @@ import {
     Poppins_300Light as PoppinsLight
 } from "@expo-google-fonts/poppins";
 import {useFonts} from "expo-font";
-import RegisterScreen from "./src/screens/auth/RegisterScreen";
 import AppNavigator from "./src/navigations/AppNavigator";
+import {ToastProvider, ToastViewport} from "@tamagui/toast";
+import CustomToast from "./src/components/CustomToast";
 
 const tamaguiConfig = createTamagui(config)
 
@@ -35,13 +36,15 @@ function App() {
     }
 
     return (
-        <TamaguiProvider config={tamaguiConfig}>
-            <Theme name={'light'}>
+        <TamaguiProvider config={tamaguiConfig} defaultTheme={"light"}>
+            <ToastProvider>
                 <YStack style={styles.container} onLayout={onLayoutRootView}>
                     <StatusBar style="light" translucent={false}/>
                     <AppNavigator/>
+
+                    <ToastViewport flexDirection="column-reverse" top={"$7"} right={0} left={0}/>
                 </YStack>
-            </Theme>
+            </ToastProvider>
         </TamaguiProvider>
     )
 }
