@@ -8,7 +8,7 @@ const TestScreen = ({navigation}) => {
     };
 
     return (
-        <YStack flex={1} backgroundColor={"white"}>
+        <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
             <TestList handlePressItem={handlePressItem}/>
         </YStack>
     );

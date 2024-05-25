@@ -10,7 +10,6 @@ import NoteChip from "../../components/NoteChip";
 const ApplicationList = ({handlePressItem}) => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [bookmarked, setBookmarked] = useState(false);
 
     useEffect(() => {
         api.get('/posts')
@@ -25,42 +24,38 @@ const ApplicationList = ({handlePressItem}) => {
     }, []);
 
     const renderItem = ({item}) => (
-            <>
-                <Text color={"white"}>{item.title}</Text>
-                <TouchableOpacity onPress={handlePressItem}>
-                    <YStack>
-                        <XStack flex={1} gap={"$3"}>
-                            <LogoCard icon={Icon}/>
-                            <YStack flex={4} gap={"$1"} justifyContent={"center"}>
-                                <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
-                                <SizableText
-                                    style={{fontFamily: 'PoppinsRegular'}}
-                                    size={'$5'}
-                                    color={"gray"}>
-                                    Role
-                                </SizableText>
-                                <XStack>
-                                    <NoteChip
-                                        text={"Stage 1"}
-                                        textColor={"deepskyblue"}
-                                        backgroundColor={"#eff4ff"}
-                                        borderColor={"#eff4ff"}/>
-                                </XStack>
-                            </YStack>
-                            <YStack flex={1} justifyContent={"center"} alignItems={"flex-end"}>
-                                <FontAwesome6 name={"chevron-right"} color={"black"} size={24} solid={bookmarked}/>
-                            </YStack>
+        <TouchableOpacity onPress={handlePressItem}>
+            <Text color={"white"}>{item.title}</Text>
+            <YStack>
+                <XStack flex={1} gap={"$3"}>
+                    <LogoCard icon={Icon}/>
+                    <YStack flex={4} gap={"$1"} justifyContent={"center"}>
+                        <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsRegular'}}
+                            size={'$5'}
+                            color={"gray"}>
+                            Role
+                        </SizableText>
+                        <XStack>
+                            <NoteChip
+                                text={"Stage 1"}
+                                textColor={"deepskyblue"}
+                                backgroundColor={"#eff4ff"}
+                                borderColor={"#eff4ff"}/>
                         </XStack>
-                        <Separator flex={1} borderWidth={"$0.5"} marginVertical={"$3"}/>
                     </YStack>
-                </TouchableOpacity>
-            </>
-        )
-    ;
+                    <YStack flex={1} justifyContent={"center"} alignItems={"flex-end"}>
+                        <FontAwesome6 name={"angle-right"} color={"black"} size={24}/>
+                    </YStack>
+                </XStack>
+                <Separator flex={1} borderWidth={"$0.5"} marginVertical={"$3"}/>
+            </YStack>
+        </TouchableOpacity>
+    );
 
     return (
-        <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}
-                paddingHorizontal={"$3"}>
+        <>
             {loading ? (
                 <Spinner size={"large"} color="lightgray"/>
             ) : (
@@ -68,9 +63,12 @@ const ApplicationList = ({handlePressItem}) => {
                     data={data}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
-                    showsVerticalScrollIndicator={false}/>
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{paddingHorizontal: 13}}
+                    nestedScrollEnabled
+                />
             )}
-        </YStack>
+        </>
     );
 };
 

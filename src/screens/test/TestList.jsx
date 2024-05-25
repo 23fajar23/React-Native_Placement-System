@@ -29,81 +29,77 @@ const TestList = ({handlePressItem}) => {
     };
 
     const renderItem = ({item}) => (
-            <>
-                <Text color={"white"}>{item.title}</Text>
-                <TouchableOpacity onPress={handlePressItem}>
+        <TouchableOpacity onPress={handlePressItem}>
+            <Text color={"white"}>{item.title}</Text>
+            <YStack
+                flex={1}
+                gap={"$3"}
+                padding={"$3"}
+                borderWidth={"$0.5"}
+                borderRadius={"$11"}
+                borderColor={"lightgrey"}
+                backgroundColor={"white"}>
+                <XStack flex={1} gap={"$3"}>
+                    <LogoCard icon={Icon}/>
+                    <YStack flex={2} alignSelf={"center"} gap={"$1"}>
+                        <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsRegular'}}
+                            size={'$5'}
+                            color={"gray"}>
+                            Role
+                        </SizableText>
+                    </YStack>
+                    <XStack flex={1} justifyContent={"flex-end"} margin={"$3"}>
+                        <TouchableOpacity onPress={toggleBookmark}>
+                            <FontAwesome6 name={"bookmark"} color={"deepskyblue"} size={24} solid={bookmarked}/>
+                        </TouchableOpacity>
+                    </XStack>
+                </XStack>
+                <Separator flex={1} borderWidth={"$0.5"}/>
+                <XStack flex={1} gap={"$3"}>
                     <YStack
                         flex={1}
-                        gap={"$3"}
-                        padding={"$3"}
-                        borderWidth={"$0.5"}
-                        borderRadius={"$11"}
-                        borderColor={"lightgrey"}
-                        backgroundColor={"white"}>
-                        <XStack flex={1} gap={"$3"}>
-                            <LogoCard icon={Icon}/>
-                            <YStack flex={2} alignSelf={"center"} gap={"$1"}>
-                                <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
-                                <SizableText
-                                    style={{fontFamily: 'PoppinsRegular'}}
-                                    size={'$5'}
-                                    color={"gray"}>
-                                    Role
-                                </SizableText>
-                            </YStack>
-                            <XStack flex={1} justifyContent={"flex-end"} margin={"$3"}>
-                                <TouchableOpacity onPress={toggleBookmark}>
-                                    <FontAwesome6 name={"bookmark"} color={"deepskyblue"} size={24} solid={bookmarked}/>
-                                </TouchableOpacity>
-                            </XStack>
-                        </XStack>
-                        <Separator flex={1} borderWidth={"$0.5"}/>
-                        <XStack flex={1} gap={"$3"}>
-                            <YStack
-                                flex={1}
-                                backgroundColor={"white"}
-                            />
-                            <YStack flex={3.5} gap={"$1"}>
-                                <SizableText
-                                    style={{fontFamily: 'PoppinsRegular'}}
-                                    size={'$5'}
-                                    color={"gray"}>
-                                    Placement Place
-                                </SizableText>
-                                <SizableText
-                                    style={{fontFamily: 'PoppinsRegular'}}
-                                    size={'$5'}
-                                    color={"deepskyblue"}>
-                                    Available : 14
-                                </SizableText>
-                                <XStack gap={"$2"}>
-                                    <NoteChip
-                                        text={"28 Aug 2023"}
-                                        textColor={"gray"}
-                                        borderColor={"gray"}
-                                        backgroundColor={"white"}/>
-                                    <NoteChip
-                                        text={"All"}
-                                        textColor={"gray"}
-                                        borderColor={"gray"}
-                                        backgroundColor={"white"}/>
-                                    <NoteChip
-                                        text={"Min. S1"}
-                                        textColor={"gray"}
-                                        borderColor={"gray"}
-                                        backgroundColor={"white"}/>
-                                </XStack>
-                            </YStack>
+                        backgroundColor={"white"}
+                    />
+                    <YStack flex={3.5} gap={"$1"}>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsRegular'}}
+                            size={'$5'}
+                            color={"gray"}>
+                            Placement Place
+                        </SizableText>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsRegular'}}
+                            size={'$5'}
+                            color={"deepskyblue"}>
+                            Available : 14
+                        </SizableText>
+                        <XStack gap={"$2"}>
+                            <NoteChip
+                                text={"28 Aug 2023"}
+                                textColor={"gray"}
+                                borderColor={"gray"}
+                                backgroundColor={"white"}/>
+                            <NoteChip
+                                text={"All"}
+                                textColor={"gray"}
+                                borderColor={"gray"}
+                                backgroundColor={"white"}/>
+                            <NoteChip
+                                text={"Min. S1"}
+                                textColor={"gray"}
+                                borderColor={"gray"}
+                                backgroundColor={"white"}/>
                         </XStack>
                     </YStack>
-                </TouchableOpacity>
-            </>
-        )
-    ;
+                </XStack>
+            </YStack>
+        </TouchableOpacity>
+    );
 
     return (
-        <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}
-                paddingHorizontal={"$3"}>
+        <>
             {loading ? (
                 <Spinner size={"large"} color="lightgray"/>
             ) : (
@@ -111,9 +107,12 @@ const TestList = ({handlePressItem}) => {
                     data={data}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
-                    showsVerticalScrollIndicator={false}/>
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{paddingHorizontal: 13}}
+                    nestedScrollEnabled
+                />
             )}
-        </YStack>
+        </>
     );
 };
 

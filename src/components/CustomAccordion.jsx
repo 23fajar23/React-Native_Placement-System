@@ -23,7 +23,7 @@ const CustomAccordion = ({title, content}) => {
                                 {title}
                             </SizableText>
                             <Square animation="quick" rotate={open ? '180deg' : '0deg'}>
-                                <FontAwesome6 name={"chevron-down"} size={16} color={"deepskyblue"}/>
+                                <FontAwesome6 name={"angle-down"} size={16} color={"deepskyblue"}/>
                             </Square>
                         </>
                     )}

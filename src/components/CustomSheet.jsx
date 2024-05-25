@@ -1,6 +1,6 @@
 import {Separator, Sheet, SizableText, XStack, YStack} from "tamagui";
 
-const CustomSheet = ({title, content, ...props}) => {
+const CustomSheet = ({title, titleColor, content, ...props}) => {
     return (
         <Sheet
             modal
@@ -16,7 +16,8 @@ const CustomSheet = ({title, content, ...props}) => {
                     <SizableText
                         alignSelf={"center"}
                         style={{fontFamily: 'PoppinsBold'}}
-                        size={'$7'}>
+                        size={'$7'}
+                        color={titleColor}>
                         {title}
                     </SizableText>
                 </YStack>

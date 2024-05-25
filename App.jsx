@@ -39,8 +39,14 @@ function App() {
         <TamaguiProvider config={tamaguiConfig} defaultTheme={"light"}>
             <ToastProvider>
                 <YStack style={styles.container} onLayout={onLayoutRootView}>
-                    <StatusBar style="light" translucent={false}/>
+                    <StatusBar style="dark" backgroundColor={"white"} translucent={false}/>
                     <AppNavigator/>
+
+                    <CustomToast
+                        backgroundColor={"#eff4ff"}
+                        borderColor={"deepskyblue"}
+                        iconColor={"deepskyblue"}
+                    />
 
                     <ToastViewport flexDirection="column-reverse" top={"$7"} right={0} left={0}/>
                 </YStack>

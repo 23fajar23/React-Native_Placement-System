@@ -1,23 +1,23 @@
-import TestDetailScreen from "../screens/test/TestDetailScreen";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {SizableText, YStack} from "tamagui";
 import {TouchableOpacity} from "react-native";
 import {FontAwesome6} from "@expo/vector-icons";
+import EditProfileScreen from "../screens/profile/EditProfileScreen";
 
-const TestStack = createNativeStackNavigator();
+const ProfileStack = createNativeStackNavigator();
 
-const TestNavigator = () => {
+const ProfileNavigator = () => {
     return (
-        <TestStack.Navigator>
-            <TestStack.Screen
-                name="TestDetail"
-                component={TestDetailScreen}
+        <ProfileStack.Navigator>
+            <ProfileStack.Screen
+                name="EditProfile"
+                component={EditProfileScreen}
                 options={{
                     headerTitle: () => (
                         <SizableText
                             size={"$7"}
                             style={{fontFamily: "PoppinsBold"}}>
-                            Details
+                            Profile
                         </SizableText>
                     ),
                     headerShadowVisible: false,
@@ -31,8 +31,8 @@ const TestNavigator = () => {
                 }}
             />
 
-        </TestStack.Navigator>
+        </ProfileStack.Navigator>
     );
 };
 
-export default TestNavigator;
+export default ProfileNavigator;

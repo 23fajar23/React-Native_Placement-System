@@ -3,18 +3,12 @@ import LogoCard from "../../components/LogoCard";
 import Icon from "../../../assets/icon.png";
 import NoteChip from "../../components/NoteChip";
 import PrimaryButton from "../../components/button/PrimaryButton";
-import CustomToast from "../../components/CustomToast";
-import Stage from "../../components/Stage";
+import Stage from "../../components/stage/Stage";
+import {FontAwesome6} from "@expo/vector-icons";
 
-const ApplicationTestScreen = ({navigation}) => {
+const ApplicationDetailScreen = ({navigation}) => {
     return (
         <>
-            <CustomToast
-                backgroundColor={"#eff4ff"}
-                borderColor={"deepskyblue"}
-                iconColor={"deepskyblue"}
-            />
-
             <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
                 <YStack
                     flex={1}
@@ -54,12 +48,6 @@ const ApplicationTestScreen = ({navigation}) => {
                                 color={"gray"}>
                                 Placement Place
                             </SizableText>
-                            <SizableText
-                                style={{fontFamily: 'PoppinsRegular'}}
-                                size={'$5'}
-                                color={"deepskyblue"}>
-                                28 Aug 2024
-                            </SizableText>
                             <XStack gap={"$2"}>
                                 <NoteChip
                                     text={"All"}
@@ -80,8 +68,16 @@ const ApplicationTestScreen = ({navigation}) => {
                         size={'$5'}>
                         Your Application Status
                     </SizableText>
-                    <Stage backgroundColor={"rgba(0, 191, 255, 0.1)"} textColor={"deepskyblue"}
-                           text={"Stage 1 : Interview"}/>
+                    <YStack width={"100%"} alignItems={"center"} gap={"$1"}>
+                        <Stage backgroundColor={"rgba(0, 128, 0, 0.1)"} textColor={"green"}
+                               title={"Stage 1 : Hackerrank"} date={"28 Jun 2024"}/>
+                        <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
+                        <Stage backgroundColor={"rgba(128, 0, 128, 0.1)"} textColor={"purple"}
+                               title={"Stage 2 : Interview"} date={"30 Jun 2024"}/>
+                        <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
+                        <Stage backgroundColor={"rgba(0.5, 0.5, 0.5, 0.1)"} textColor={"grey"}
+                               title={"Stage 3 : Project"} date={"1 Juli 2024"}/>
+                    </YStack>
                 </YStack>
             </ScrollView>
 
@@ -96,10 +92,10 @@ const ApplicationTestScreen = ({navigation}) => {
                 paddingBottom={"$5"}
                 borderTopColor={"lightgrey"}
                 borderTopWidth={"$0.5"}>
-                <PrimaryButton title={"Discover Another Test"} onPress={() => navigation.navigate("TestScreen")}/>
+                <PrimaryButton title={"Discover Another Test"} onPress={() => navigation.navigate("Test")}/>
             </XStack>
         </>
     )
 }
 
-export default ApplicationTestScreen
+export default ApplicationDetailScreen

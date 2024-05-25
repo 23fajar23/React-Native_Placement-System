@@ -8,7 +8,7 @@ const ApplicationScreen = ({navigation}) => {
     };
 
     return (
-        <YStack flex={1} backgroundColor={"white"}>
+        <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
             <ApplicationList handlePressItem={handlePressItem}/>
         </YStack>
     )

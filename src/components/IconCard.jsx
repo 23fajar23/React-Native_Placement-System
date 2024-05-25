@@ -1,4 +1,4 @@
-import {Card, YStack} from "tamagui";
+import {Card} from "tamagui";
 import {TouchableOpacity} from "react-native";
 import {FontAwesome6} from "@expo/vector-icons";
 

@@ -19,7 +19,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                             borderColor={"white"}
                             width={"100%"}
                             iconAfter={() =>
-                                <FontAwesome6 name={"chevron-down"} size={16} color={"grey"}/>
+                                <FontAwesome6 name={"caret-down"} size={16} color={"grey"}/>
                             }>
                             <YStack position={"absolute"} zIndex={1} left={"$4"}>
                                 <FontAwesome6
@@ -39,7 +39,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                         </Select.Trigger>
 
                         <Adapt when="sm" platform="touch">
-                            <CustomSheet title={placeholder} content={<Adapt.Contents/>}/>
+                            <CustomSheet title={placeholder} titleColor={"black"} content={<Adapt.Contents/>}/>
                         </Adapt>
 
                         <Select.Content zIndex={9999}>

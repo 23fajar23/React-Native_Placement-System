@@ -1,11 +1,11 @@
 import {SizableText, YStack} from "tamagui";
 
-const ProfileScreen = () => {
+const EditProfileScreen = () => {
     return (
         <YStack flex={1} backgroundColor={"white"} justifyContent={"center"} alignItems={"center"}>
-            <SizableText>Profile Screen</SizableText>
+            <SizableText>Edit Profile Screen</SizableText>
         </YStack>
     )
 }
 
-export default ProfileScreen
+export default EditProfileScreen

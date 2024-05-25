@@ -7,22 +7,15 @@ import CustomAccordion from "../../components/CustomAccordion";
 import QuotaRow from "../../components/QuotaRow";
 import CustomSheet from "../../components/CustomSheet";
 import {useState} from "react";
-import SecondaryButton from "../../components/button/SecondaryButton";
-import CustomToast from "../../components/CustomToast";
 import {useToastController} from "@tamagui/toast";
+import ConfirmationContent from "../../components/ConfirmationContent";
 
-const DetailTestScreen = ({}) => {
+const TestDetailScreen = ({}) => {
     const [openSheet, setOpenSheet] = useState(false)
     const toast = useToastController()
 
     return (
         <>
-            <CustomToast
-                backgroundColor={"#eff4ff"}
-                borderColor={"deepskyblue"}
-                iconColor={"deepskyblue"}
-            />
-
             <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
                 <YStack
                     flex={1}
@@ -141,33 +134,26 @@ const DetailTestScreen = ({}) => {
 
             <CustomSheet
                 title={"Apply Test"}
+                titleColor={"black"}
                 onOpenChange={setOpenSheet}
                 open={openSheet}
                 content={
-                    <YStack flex={1} alignItems={"center"} margin={"$3"} marginTop={0} gap={"$3"}>
-                        <SizableText
-                            style={{fontFamily: 'PoppinsRegular'}}
-                            size={'$5'}>
-                            Are you sure you want to apply?
-                        </SizableText>
-                        <XStack flex={1} width={"100%"} gap={"$3"}>
-                            <SecondaryButton title={"Cancel"} onPress={() => setOpenSheet(false)}/>
-                            <PrimaryButton
-                                title={"Yes, Apply"}
-                                onPress={() => {
-                                    setOpenSheet(false)
-                                    toast.show('Successfully saved!', {
-                                        message: "Don't worry, we've got your data.",
-                                        native: false,
-                                    })
-                                }}
-                            />
-                        </XStack>
-                    </YStack>
+                    <ConfirmationContent
+                        confirmationText={"Are you sure you want to apply?"}
+                        buttonText={"Yes, Apply"}
+                        onPressSecondary={() => setOpenSheet(false)}
+                        onPressPrimary={() => {
+                            setOpenSheet(false)
+                            toast.show('Successfully saved!', {
+                                message: "Don't worry, we've got your data.",
+                                native: false,
+                            })
+                        }}
+                    />
                 }
             />
         </>
     )
 }
 
-export default DetailTestScreen
+export default TestDetailScreen

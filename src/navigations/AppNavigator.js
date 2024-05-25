@@ -5,6 +5,8 @@ import MainTabNavigator from "./MainTabNavigator";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import TestNavigator from "./TestNavigator";
 import ApplicationNavigator from "./ApplicationNavigator";
+import HomeNavigator from "./HomeNavigator";
+import ProfileNavigator from "./ProfileNavigator";
 
 const AppStack = createNativeStackNavigator();
 
@@ -20,6 +22,11 @@ const AppNavigator = () => {
                     options={{headerShown: false}}
                 />
                 <AppStack.Screen
+                    name={"HomeNavigator"}
+                    component={HomeNavigator}
+                    options={{headerShown: false}}
+                />
+                <AppStack.Screen
                     name={"TestNavigator"}
                     component={TestNavigator}
                     options={{headerShown: false}}
@@ -27,6 +34,11 @@ const AppNavigator = () => {
                 <AppStack.Screen
                     name={"ApplicationNavigator"}
                     component={ApplicationNavigator}
+                    options={{headerShown: false}}
+                />
+                <AppStack.Screen
+                    name={"ProfileNavigator"}
+                    component={ProfileNavigator}
                     options={{headerShown: false}}
                 />
             </AppStack.Navigator>
