@@ -8,7 +8,12 @@ import StatisticCard from "../../components/home/StatisticCard";
 import {TouchableOpacity} from "react-native";
 import TestList from "../test/TestList";
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
+
+    const handlePressItem = () => {
+        navigation.navigate('TestNavigator', {screen: 'TestDetail'})
+    };
+
     return (
         <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
             <YStack flex={1} padding={"$3"} gap={"$5"}>
@@ -69,7 +74,7 @@ const HomeScreen = () => {
                     alignItems={"center"}
                     justifyContent={"center"}
                     marginHorizontal={"$-3"}>
-                    <TestList/>
+                    <TestList handlePressItem={handlePressItem}/>
                 </YStack>
             </YStack>
         </ScrollView>

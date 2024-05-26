@@ -4,11 +4,11 @@ import TestList from "./TestList";
 const TestScreen = ({navigation}) => {
 
     const handlePressItem = () => {
-        navigation.navigate('TestNavigator')
+        navigation.navigate('TestNavigator', {screen: 'TestDetail'})
     };
 
     return (
-        <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
+        <YStack flex={1} backgroundColor={"white"}>
             <TestList handlePressItem={handlePressItem}/>
         </YStack>
     );
