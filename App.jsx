@@ -13,6 +13,8 @@ import {useFonts} from "expo-font";
 import AppNavigator from "./src/navigations/AppNavigator";
 import {ToastProvider, ToastViewport} from "@tamagui/toast";
 import CustomToast from "./src/components/CustomToast";
+import {Provider, useSelector} from "react-redux";
+import store from "./src/redux/store";
 
 const tamaguiConfig = createTamagui(config)
 
@@ -36,24 +38,34 @@ function App() {
     }
 
     return (
-        <TamaguiProvider config={tamaguiConfig} defaultTheme={"light"}>
-            <ToastProvider>
-                <YStack style={styles.container} onLayout={onLayoutRootView}>
-                    <StatusBar style="dark" backgroundColor={"white"} translucent={false}/>
-                    <AppNavigator/>
+        <Provider store={store}>
+            <TamaguiProvider config={tamaguiConfig} defaultTheme={"light"}>
+                <ToastProvider>
+                    <YStack style={styles.container} onLayout={onLayoutRootView}>
+                        <StatusBar style="dark" backgroundColor={"white"} translucent={false}/>
+                        <AppNavigator/>
 
-                    <CustomToast
-                        backgroundColor={"#eff4ff"}
-                        borderColor={"deepskyblue"}
-                        iconColor={"deepskyblue"}
-                    />
+                        <AuthErrorToast/>
 
-                    <ToastViewport flexDirection="column-reverse" top={"$7"} right={0} left={0}/>
-                </YStack>
-            </ToastProvider>
-        </TamaguiProvider>
+                        <ToastViewport flexDirection="column-reverse" top={"$7"} right={0} left={0}/>
+                    </YStack>
+                </ToastProvider>
+            </TamaguiProvider>
+        </Provider>
     )
 }
+
+const AuthErrorToast = () => {
+    const error = useSelector((state) => state.auth.error);
+
+    return (
+        <CustomToast
+            backgroundColor={error ? "#fff3f3" : "#eff2ff"}
+            borderColor={error ? "red" : "deepskyblue"}
+            iconColor={error ? "red" : "deepskyblue"}
+        />
+    );
+};
 
 const styles = StyleSheet.create({
     container: {

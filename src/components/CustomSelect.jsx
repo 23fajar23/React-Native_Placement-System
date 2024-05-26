@@ -19,21 +19,21 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                             borderColor={"white"}
                             width={"100%"}
                             iconAfter={() =>
-                                <FontAwesome6 name={"caret-down"} size={16} color={"grey"}/>
+                                <FontAwesome6 name={"caret-down"} size={16} color={value ? "black" : "grey"}/>
                             }>
                             <YStack position={"absolute"} zIndex={1} left={"$4"}>
                                 <FontAwesome6
                                     name={leftIcon}
                                     size={16}
-                                    color={"grey"}
+                                    color={value ? "black" : "grey"}
                                     solid/>
                             </YStack>
                             <Select.Value
-                                left={"$5"}
+                                left={"$6"}
                                 size={"$5"}
                                 style={{fontFamily: "PoppinsRegular"}}
                                 placeholder={placeholder}
-                                color={"grey"}>
+                                color={value ? "black" : "grey"}>
                                 {value ? value.name : placeholder}
                             </Select.Value>
                         </Select.Trigger>

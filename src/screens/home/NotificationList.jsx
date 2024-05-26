@@ -1,8 +1,7 @@
-import {Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
+import {SizableText, Spinner, Text, XStack, YStack} from "tamagui";
 import {FlatList, TouchableOpacity} from "react-native";
 import React, {useEffect, useState} from "react";
-import api from "../../services/ApiService";
-import {FontAwesome6} from "@expo/vector-icons";
+import api from "../../api/auth";
 import IconCircleCard from "../../components/IconCircleCard";
 import NoteChip from "../../components/NoteChip";
 

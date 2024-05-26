@@ -1,7 +1,6 @@
 import {Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
 import {FlatList, TouchableOpacity} from "react-native";
-import React, {useEffect, useState} from "react";
-import api from "../../services/ApiService";
+import React, {useState} from "react";
 import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
 import LogoCard from "../../components/LogoCard";
@@ -12,17 +11,17 @@ const TestList = ({handlePressItem}) => {
     const [loading, setLoading] = useState(true);
     const [bookmarked, setBookmarked] = useState(false);
 
-    useEffect(() => {
-        api.get('/posts')
-            .then((response) => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setLoading(false);
-            });
-    }, []);
+    // useEffect(() => {
+    //     api.get('/posts')
+    //         .then((response) => {
+    //             setData(response.data);
+    //             setLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.error(error);
+    //             setLoading(false);
+    //         });
+    // }, []);
 
     const toggleBookmark = () => {
         setBookmarked(!bookmarked);

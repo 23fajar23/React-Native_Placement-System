@@ -7,7 +7,7 @@ import ApplicationScreen from "../screens/application/ApplicationScreen";
 import Icon from "../../assets/icon.png";
 import {TouchableOpacity} from "react-native";
 import TestScreen from "../screens/test/TestScreen";
-import getCurrentGreeting from "../helpers/getCurrentGreeting"
+import getCurrentGreeting from "../utils/getCurrentGreeting"
 
 const Tab = createBottomTabNavigator();
 

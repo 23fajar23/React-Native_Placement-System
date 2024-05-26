@@ -13,26 +13,23 @@ const CustomToast = ({backgroundColor, borderColor, iconColor}) => {
             duration={toast.duration}
             enterStyle={{opacity: 0, scale: 0.5, y: -25}}
             exitStyle={{opacity: 0, scale: 1, y: -20}}
-             y={0}
+            y={0}
             backgroundColor={backgroundColor}
             borderColor={borderColor}
-            borderRadius={"$7"}
+            borderRadius={"$6"}
             borderWidth={"$0.5"}
             opacity={1}
             scale={1}
             animation="100ms"
             viewportName={toast.viewportName}>
             <XStack alignItems={"center"} gap={"$3"}>
-                <FontAwesome6 name={"square-check"} color={iconColor} size={28} solid/>
+                <FontAwesome6 name={"square-check"} color={iconColor} size={24} solid/>
                 <YStack>
                     <SizableText
+                        top={"$1"}
                         style={{fontFamily: 'PoppinsBold'}}
-                        size={'$3'}>
-                        {toast.title}
-                    </SizableText>
-                    <SizableText
-                        style={{fontFamily: 'PoppinsRegular'}}
-                        size={'$1'}>
+                        size={'$5'}
+                        color={"black"}>
                         {toast.message}
                     </SizableText>
                 </YStack>

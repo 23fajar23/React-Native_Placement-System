@@ -47,11 +47,9 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                             onBlur={(event) => {
                                 onBlur(event)
                                 setIsFocused(false)
-                                console.log('onBlur event fired');
                             }}
                             onFocus={() => {
                                 setIsFocused(true)
-                                console.log('onFocus event fired');
                             }}
                             value={value}/>
                     </XStack>

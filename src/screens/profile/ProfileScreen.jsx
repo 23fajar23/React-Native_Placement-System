@@ -7,9 +7,26 @@ import CustomSheet from "../../components/CustomSheet";
 import ProfileSection from "../../components/profile/ProfileSection";
 import ProfileSectionEmpty from "../../components/profile/ProfileSectionEmpty";
 import PersonalRow from "../../components/PersonalRow";
+import {useDispatch} from "react-redux";
+import {logout} from "../../api/auth";
+import {useToastController} from "@tamagui/toast";
 
 const ProfileScreen = ({navigation}) => {
     const [openSheet, setOpenSheet] = useState(false)
+    const dispatch = useDispatch();
+
+    const toast = useToastController()
+
+    const handleLogout = () => {
+        dispatch(logout()).then(() => {
+            navigation.navigate('Login');
+            toast.show('', {
+                message: "Success Logout",
+                native: false,
+            });
+        });
+    };
+
 
     return (
         <>
@@ -80,6 +97,7 @@ const ProfileScreen = ({navigation}) => {
                         onPressSecondary={() => setOpenSheet(false)}
                         onPressPrimary={() => {
                             setOpenSheet(false)
+                            handleLogout()
                         }}
                     />
                 }

@@ -1,4 +1,4 @@
-import {Checkbox, Label, ScrollView, Separator, SizableText, XStack, YStack} from "tamagui";
+import {Checkbox, Label, ScrollView, Separator, SizableText, Spinner, XStack, YStack} from "tamagui";
 import {FontAwesome6} from "@expo/vector-icons";
 import {TouchableOpacity} from "react-native";
 import Logo from '../../../assets/logo.png'
@@ -11,6 +11,11 @@ import PasswordInput from "../../components/PasswordInput";
 import AuthHeader from "../../components/auth/AuthHeader";
 import AuthFooter from "../../components/auth/AuthFooter";
 import PrimaryButton from "../../components/button/PrimaryButton";
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect, useState} from "react";
+import {login} from "../../api/auth";
+import {useToastController} from "@tamagui/toast";
+import * as SecureStorage from "expo-secure-store";
 
 const loginSchema = yup.object({
     email: yup
@@ -20,7 +25,7 @@ const loginSchema = yup.object({
     password: yup
         .string()
         .min(8, "Password must be at least 8 characters")
-        .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+        // .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
         .matches(/\d/, "Password must contain at least one number")
         .required("Password is required"),
 }).required();
@@ -66,10 +71,12 @@ const LoginAlternatives = () => (
 );
 
 const LoginScreen = ({navigation}) => {
+    const [rememberMe, setRememberMe] = useState(false);
+
     const {
         control,
-        getValues,
         handleSubmit,
+        setValue,
         formState: {errors},
     } = useForm({
         defaultValues: {
@@ -79,9 +86,50 @@ const LoginScreen = ({navigation}) => {
         resolver: yupResolver(loginSchema),
     });
 
-    const onSubmit = () => {
-        const {email, password} = getValues()
-        navigation.navigate('Home')
+    const toast = useToastController()
+
+    const dispatch = useDispatch();
+    const {token, loading, message, error} = useSelector((state) => state.auth);
+
+    useEffect(() => {
+            const fetchCredentials = async () => {
+                const savedEmail = SecureStorage.getItem('rememberedEmail');
+                const savedPassword = SecureStorage.getItem('rememberedPassword');
+                if (savedEmail && savedPassword) {
+                    setValue('email', savedEmail);
+                    setValue('password', savedPassword);
+                }
+            };
+            fetchCredentials();
+
+            if (message === "Success Login") {
+                toast.show('', {
+                    message: message,
+                    native: false,
+                });
+                navigation.navigate('InitialNavigator');
+            } else if (error) {
+                toast.show('', {
+                    message: error.message,
+                    native: false,
+                });
+            }
+        }, [token, navigation, toast, message, error]
+    )
+    ;
+
+    const onSubmit = ({email, password}) => {
+        dispatch(login({email, password}))
+
+        if (rememberMe) {
+            SecureStorage.setItem('rememberedEmail', email);
+            SecureStorage.setItem('rememberedPassword', password);
+        } else {
+            SecureStorage.deleteItemAsync('rememberedEmail');
+            SecureStorage.deleteItemAsync('rememberedPassword');
+        }
+
+        setRememberMe(false)
     };
 
     const onClickRegister = () => {
@@ -95,19 +143,39 @@ const LoginScreen = ({navigation}) => {
 
                 <YStack alignItems={"center"} width={"100%"} gap={"$3"}>
                     <InputFields control={control} errors={errors}/>
-                    <XStack alignItems={'center'} gap={'$3'}>
-                        <Checkbox theme={'blue'} id={'remember_me'} size={'$3'}>
+                    <XStack alignItems={'center'} gap={'$2'}>
+                        <Checkbox
+                            theme={'blue'}
+                            id={'remember_me'}
+                            size={'$3'}
+                            checked={rememberMe}
+                            onCheckedChange={setRememberMe}>
                             <Checkbox.Indicator>
-                                <FontAwesome6 name={'check'} size={8} color={"white"}/>
+                                <FontAwesome6
+                                    name={'check'}
+                                    size={8}
+                                    color={"white"}
+                                />
                             </Checkbox.Indicator>
                         </Checkbox>
-                        <Label style={{fontFamily: "PoppinsRegular"}} size={'$5'} htmlFor={'remember_me'}>
+                        <Label top={"$1"} style={{fontFamily: "PoppinsRegular"}} size={'$3'} htmlFor={'remember_me'}>
                             Remember me
                         </Label>
                     </XStack>
                 </YStack>
 
-                <PrimaryButton onPress={handleSubmit(onSubmit)} title={"Login"}/>
+                <PrimaryButton
+                    onPress={handleSubmit(onSubmit)}
+                    title={
+                        <>
+                            {loading ? (
+                                <Spinner size={"small"} color="lightgray"/>
+                            ) : (
+                                "Login"
+                            )}
+                        </>
+                    }
+                />
 
                 <TouchableOpacity>
                     <SizableText style={{fontFamily: 'PoppinsRegular'}} size={'$5'} color={"deepskyblue"}>

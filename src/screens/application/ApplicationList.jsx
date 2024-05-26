@@ -1,7 +1,7 @@
 import {Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
 import {FlatList, TouchableOpacity} from "react-native";
 import React, {useEffect, useState} from "react";
-import api from "../../services/ApiService";
+import api from "../../api/auth";
 import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
 import LogoCard from "../../components/LogoCard";
