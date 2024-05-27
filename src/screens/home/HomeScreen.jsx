@@ -68,14 +68,14 @@ const HomeScreen = ({navigation}) => {
                         </SizableText>
                     </TouchableOpacity>
                 </XStack>
-                <YStack
-                    flex={1}
-                    backgroundColor={"white"}
-                    alignItems={"center"}
-                    justifyContent={"center"}
-                    marginHorizontal={"$-3"}>
-                    <TestList handlePressItem={handlePressItem}/>
-                </YStack>
+                {/*<YStack*/}
+                {/*    flex={1}*/}
+                {/*    backgroundColor={"white"}*/}
+                {/*    alignItems={"center"}*/}
+                {/*    justifyContent={"center"}*/}
+                {/*    marginHorizontal={"$-3"}>*/}
+                {/*    <TestList handlePressItem={handlePressItem}/>*/}
+                {/*</YStack>*/}
             </YStack>
         </ScrollView>
     )

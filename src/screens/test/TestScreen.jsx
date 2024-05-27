@@ -3,8 +3,8 @@ import TestList from "./TestList";
 
 const TestScreen = ({navigation}) => {
 
-    const handlePressItem = () => {
-        navigation.navigate('TestNavigator', {screen: 'TestDetail'})
+    const handlePressItem = (testId) => {
+        navigation.navigate('TestNavigator', {screen: 'TestDetail', params: {testId}});
     };
 
     return (

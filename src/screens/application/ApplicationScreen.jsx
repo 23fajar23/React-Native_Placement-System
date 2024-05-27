@@ -9,7 +9,7 @@ const ApplicationScreen = ({navigation}) => {
 
     return (
         <YStack flex={1} backgroundColor={"white"}>
-            <ApplicationList handlePressItem={handlePressItem}/>
+            {/*<ApplicationList handlePressItem={handlePressItem}/>*/}
         </YStack>
     )
 }

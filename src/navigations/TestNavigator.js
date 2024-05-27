@@ -1,8 +1,7 @@
 import TestDetailScreen from "../screens/test/TestDetailScreen";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {SizableText, YStack} from "tamagui";
-import {TouchableOpacity} from "react-native";
-import {FontAwesome6} from "@expo/vector-icons";
+import {SizableText} from "tamagui";
+import SavedTestScreen from "../screens/test/SavedTestScreen";
 
 const TestStack = createNativeStackNavigator();
 
@@ -21,16 +20,22 @@ const TestNavigator = () => {
                         </SizableText>
                     ),
                     headerShadowVisible: false,
-                    headerRight: () => (
-                        <YStack>
-                            <TouchableOpacity>
-                                <FontAwesome6 name={"bookmark"} size={24}/>
-                            </TouchableOpacity>
-                        </YStack>
-                    ),
                 }}
             />
-
+            <TestStack.Screen
+                name="SavedTest"
+                component={SavedTestScreen}
+                options={{
+                    headerTitle: () => (
+                        <SizableText
+                            size={"$7"}
+                            style={{fontFamily: "PoppinsBold"}}>
+                            Saved Tests
+                        </SizableText>
+                    ),
+                    headerShadowVisible: false,
+                }}
+            />
         </TestStack.Navigator>
     );
 };

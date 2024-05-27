@@ -1,113 +1,118 @@
-import {Separator, SizableText, Spinner, Text, XStack, YStack} from "tamagui";
+import {Separator, SizableText, Spinner, XStack, YStack} from "tamagui";
 import {FlatList, TouchableOpacity} from "react-native";
-import React, {useState} from "react";
+import React, {useEffect} from "react";
 import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
 import LogoCard from "../../components/LogoCard";
 import NoteChip from "../../components/NoteChip";
+import {useDispatch, useSelector} from "react-redux";
+import {getTests} from "../../api/test";
+import {toggleBookmark} from "../../redux/bookmarkSlice";
+import EmptyList from "../../components/EmptyList";
+import {formatDate} from "../../utils/formatDate";
 
 const TestList = ({handlePressItem}) => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [bookmarked, setBookmarked] = useState(false);
+    const dispatch = useDispatch()
+    const {loading, tests} = useSelector((state) => state.test)
+    const bookmarked = useSelector((state) => state.bookmark.bookmarkedTests);
 
-    // useEffect(() => {
-    //     api.get('/posts')
-    //         .then((response) => {
-    //             setData(response.data);
-    //             setLoading(false);
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //             setLoading(false);
-    //         });
-    // }, []);
+    useEffect(() => {
+        dispatch(getTests())
+    }, [dispatch]);
 
-    const toggleBookmark = () => {
-        setBookmarked(!bookmarked);
+    const handleToggleBookmark = (id) => {
+        dispatch(toggleBookmark(id));
     };
 
-    const renderItem = ({item}) => (
-        <TouchableOpacity onPress={handlePressItem}>
-            <Text color={"white"}>{item.title}</Text>
-            <YStack
-                flex={1}
-                gap={"$3"}
-                padding={"$3"}
-                borderWidth={"$0.5"}
-                borderRadius={"$11"}
-                borderColor={"lightgrey"}
-                backgroundColor={"white"}>
-                <XStack flex={1} gap={"$3"}>
-                    <LogoCard icon={Icon}/>
-                    <YStack flex={2} alignSelf={"center"} gap={"$1"}>
-                        <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
-                        <SizableText
-                            style={{fontFamily: 'PoppinsRegular'}}
-                            size={'$5'}
-                            color={"gray"}>
-                            Role
-                        </SizableText>
-                    </YStack>
-                    <XStack flex={1} justifyContent={"flex-end"} margin={"$3"}>
-                        <TouchableOpacity onPress={toggleBookmark}>
-                            <FontAwesome6 name={"bookmark"} color={"deepskyblue"} size={24} solid={bookmarked}/>
-                        </TouchableOpacity>
-                    </XStack>
-                </XStack>
-                <Separator flex={1} borderWidth={"$0.5"}/>
-                <XStack flex={1} gap={"$3"}>
-                    <YStack
-                        flex={1}
-                        backgroundColor={"white"}
-                    />
-                    <YStack flex={3.5} gap={"$1"}>
-                        <SizableText
-                            style={{fontFamily: 'PoppinsRegular'}}
-                            size={'$5'}
-                            color={"gray"}>
-                            Placement Place
-                        </SizableText>
-                        <SizableText
-                            style={{fontFamily: 'PoppinsRegular'}}
-                            size={'$5'}
-                            color={"deepskyblue"}>
-                            Available : 14
-                        </SizableText>
-                        <XStack gap={"$2"}>
-                            <NoteChip
-                                text={"28 Aug 2023"}
-                                textColor={"gray"}
-                                borderColor={"gray"}
-                                backgroundColor={"white"}/>
-                            <NoteChip
-                                text={"All"}
-                                textColor={"gray"}
-                                borderColor={"gray"}
-                                backgroundColor={"white"}/>
-                            <NoteChip
-                                text={"Min. S1"}
-                                textColor={"gray"}
-                                borderColor={"gray"}
-                                backgroundColor={"white"}/>
+    const renderItem = ({item}) => {
+        const isBookmarked = bookmarked[item.id];
+
+        return (
+            <TouchableOpacity onPress={() => handlePressItem(item.id)}>
+                <YStack
+                    flex={1}
+                    gap={"$3"}
+                    padding={"$3"}
+                    borderWidth={"$0.5"}
+                    borderRadius={"$11"}
+                    borderColor={"lightgrey"}
+                    backgroundColor={"white"}>
+                    <XStack flex={1} gap={"$3"}>
+                        <LogoCard icon={Icon}/>
+                        <YStack flex={2} alignSelf={"center"} gap={"$1"}>
+                            <SizableText style={{fontFamily: 'PoppinsBold'}}
+                                         size={'$7'}>{item.company.name}</SizableText>
+                            <SizableText
+                                style={{fontFamily: 'PoppinsRegular'}}
+                                size={'$5'}
+                                color={"gray"}>
+                                {item.rolePlacement}
+                            </SizableText>
+                        </YStack>
+                        <XStack flex={1} justifyContent={"flex-end"} margin={"$3"}>
+                            <TouchableOpacity onPress={() => handleToggleBookmark(item.id)}>
+                                <FontAwesome6 name={"bookmark"} color={"deepskyblue"} size={24} solid={isBookmarked}/>
+                            </TouchableOpacity>
                         </XStack>
-                    </YStack>
-                </XStack>
-            </YStack>
-        </TouchableOpacity>
-    );
+                    </XStack>
+                    <Separator flex={1} borderWidth={"$0.5"}/>
+                    <XStack flex={1} gap={"$3"}>
+                        <YStack
+                            flex={1}
+                            backgroundColor={"white"}
+                        />
+                        <YStack flex={3.5} gap={"$1"}>
+                            <SizableText
+                                style={{fontFamily: 'PoppinsRegular'}}
+                                size={'$5'}
+                                color={"gray"}>
+                                {item.placement}
+                            </SizableText>
+                            <SizableText
+                                style={{fontFamily: 'PoppinsRegular'}}
+                                size={'$5'}
+                                color={item.stages[0].quotas[0].available === 0 ? "red" : "deepskyblue"}>
+                                Available : {item.stages[0].quotas[0].available}
+                            </SizableText>
+                            <XStack gap={"$2"}>
+                                <NoteChip
+                                    text={formatDate(item.stages[0].dateTime)}
+                                    textColor={"gray"}
+                                    borderColor={"gray"}
+                                    backgroundColor={"white"}/>
+                                <NoteChip
+                                    text={item.stages[0].quotas[0].type}
+                                    textColor={"gray"}
+                                    borderColor={"gray"}
+                                    backgroundColor={"white"}/>
+                                <NoteChip
+                                    text={`Min. ${item.education.name}`}
+                                    textColor={"gray"}
+                                    borderColor={"gray"}
+                                    backgroundColor={"white"}/>
+                            </XStack>
+                        </YStack>
+                    </XStack>
+                </YStack>
+            </TouchableOpacity>
+        )
+    }
 
     return (
         <>
             {loading ? (
-                <Spinner size={"large"} color="lightgray"/>
+                <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+                    <Spinner size={"large"} color="lightgray"/>
+                </YStack>
+            ) : tests.length === 0 ? (
+                <EmptyList text={"placement test"}/>
             ) : (
                 <FlatList
-                    data={data}
+                    data={tests}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{paddingHorizontal: 13}}
+                    contentContainerStyle={{paddingHorizontal: 13, paddingVertical: 7, gap: 13}}
                     nestedScrollEnabled
                 />
             )}

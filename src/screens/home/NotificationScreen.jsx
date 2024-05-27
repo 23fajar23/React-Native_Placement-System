@@ -4,7 +4,7 @@ import NotificationList from "./NotificationList";
 const NotificationScreen = () => {
     return (
         <YStack flex={1} backgroundColor={"white"}>
-            <NotificationList/>
+            {/*<NotificationList/>*/}
         </YStack>
     )
 }

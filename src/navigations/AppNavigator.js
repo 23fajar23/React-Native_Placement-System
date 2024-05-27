@@ -23,6 +23,7 @@ const AppNavigator = () => {
             if (storedToken) {
                 dispatch(setToken(storedToken))
             }
+            console.log("storedToken", storedToken)
         }
 
         loadToken()

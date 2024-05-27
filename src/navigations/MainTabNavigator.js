@@ -63,8 +63,10 @@ const MainTabNavigator = ({navigation}) => {
         const fetchUserIdAndTrainee = async () => {
             try {
                 const userId = await SecureStore.getItemAsync('userId');
+                console.log("userId", userId)
                 if (userId) {
                     dispatch(getTraineeById(userId));
+                    console.log("selectedTrainee", selectedTrainee)
                 }
             } catch (error) {
                 console.error('Failed to fetch userId from SecureStore', error);
@@ -74,13 +76,13 @@ const MainTabNavigator = ({navigation}) => {
         fetchUserIdAndTrainee();
     }, [dispatch]);
 
-    const handlePressIcon = () => {
-        navigation.navigate('HomeNavigator', {screen: 'Notification'})
+    const handlePressIcon = (navigator, screen) => {
+        navigation.navigate(navigator, {screen: screen})
     };
 
     if (loading || !selectedTrainee) {
         return (
-            <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+            <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
                 <Spinner size={"large"} color="lightgray"/>
             </YStack>
         )
@@ -143,7 +145,7 @@ const MainTabNavigator = ({navigation}) => {
                     ),
                     headerRight: () => (
                         <YStack marginRight={"$4"}>
-                            <TouchableOpacity onPress={handlePressIcon}>
+                            <TouchableOpacity onPress={() => handlePressIcon('HomeNavigator', 'Notification')}>
                                 <FontAwesome6 name={"bell"} size={24}/>
                             </TouchableOpacity>
                         </YStack>
@@ -174,7 +176,7 @@ const MainTabNavigator = ({navigation}) => {
                     ),
                     headerRight: () => (
                         <YStack marginRight={"$4"}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => handlePressIcon('TestNavigator', 'SavedTest')}>
                                 <FontAwesome6 name={"bookmark"} size={24}/>
                             </TouchableOpacity>
                         </YStack>
