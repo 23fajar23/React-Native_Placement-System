@@ -2,9 +2,6 @@ import {Avatar, ScrollView, Separator, XStack, YStack} from "tamagui";
 import React from "react";
 import CustomInput from "../../components/CustomInput";
 import * as yup from "yup";
-import CustomSelect from "../../components/CustomSelect";
-import {educationalStatus} from "../../dummys/educationalStatus";
-import {batches} from "../../dummys/batches";
 import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import PrimaryButton from "../../components/button/PrimaryButton";
@@ -66,22 +63,22 @@ const InputFields = ({control, errors}) => (
             placeholder={"Address"}
             error={errors.address}
         />
-        <CustomSelect
-            name={"educationId"}
-            control={control}
-            error={errors.educationId}
-            leftIcon={"graduation-cap"}
-            placeholder={"Select Educational Status"}
-            items={educationalStatus}
-        />
-        <CustomSelect
-            name={"batchId"}
-            control={control}
-            error={errors.batchId}
-            leftIcon={"school"}
-            placeholder={"Select Batch"}
-            items={batches}
-        />
+        {/*<CustomSelect*/}
+        {/*    name={"educationId"}*/}
+        {/*    control={control}*/}
+        {/*    error={errors.educationId}*/}
+        {/*    leftIcon={"graduation-cap"}*/}
+        {/*    placeholder={"Select Educational Status"}*/}
+        {/*    items={educationalStatus}*/}
+        {/*/>*/}
+        {/*<CustomSelect*/}
+        {/*    name={"batchId"}*/}
+        {/*    control={control}*/}
+        {/*    error={errors.batchId}*/}
+        {/*    leftIcon={"school"}*/}
+        {/*    placeholder={"Select Batch"}*/}
+        {/*    items={batches}*/}
+        {/*/>*/}
     </YStack>
 );
 

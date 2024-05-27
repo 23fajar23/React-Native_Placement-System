@@ -16,6 +16,7 @@ import React, {useEffect, useState} from "react";
 import {login} from "../../api/auth";
 import {useToastController} from "@tamagui/toast";
 import * as SecureStorage from "expo-secure-store";
+import {setStatus} from "../../redux/traineeSlice";
 
 const loginSchema = yup.object({
     email: yup
@@ -72,6 +73,7 @@ const LoginAlternatives = () => (
 
 const LoginScreen = ({navigation}) => {
     const [rememberMe, setRememberMe] = useState(false);
+    const toast = useToastController()
 
     const {
         control,
@@ -86,10 +88,8 @@ const LoginScreen = ({navigation}) => {
         resolver: yupResolver(loginSchema),
     });
 
-    const toast = useToastController()
-
     const dispatch = useDispatch();
-    const {token, loading, message, error} = useSelector((state) => state.auth);
+    const {loading, error, status} = useSelector((state) => state.auth);
 
     useEffect(() => {
             const fetchCredentials = async () => {
@@ -102,9 +102,9 @@ const LoginScreen = ({navigation}) => {
             };
             fetchCredentials();
 
-            if (message === "Success Login") {
+            if (status === 200) {
                 toast.show('', {
-                    message: message,
+                    message: "Login Success!",
                     native: false,
                 });
                 navigation.navigate('InitialNavigator');
@@ -114,9 +114,10 @@ const LoginScreen = ({navigation}) => {
                     native: false,
                 });
             }
-        }, [token, navigation, toast, message, error]
+
+            dispatch(setStatus(null))
+        }, [navigation, toast, error, status]
     )
-    ;
 
     const onSubmit = ({email, password}) => {
         dispatch(login({email, password}))

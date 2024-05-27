@@ -2,12 +2,16 @@ import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/home/HomeScreen";
 import ProfileScreen from "../screens/profile/ProfileScreen";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
-import {Avatar, Image, SizableText, XStack, YStack} from "tamagui";
+import {Avatar, Image, SizableText, Spinner, XStack, YStack} from "tamagui";
 import ApplicationScreen from "../screens/application/ApplicationScreen";
 import Icon from "../../assets/icon.png";
 import {TouchableOpacity} from "react-native";
 import TestScreen from "../screens/test/TestScreen";
 import getCurrentGreeting from "../utils/getCurrentGreeting"
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import * as SecureStore from "expo-secure-store";
+import {getTraineeById} from "../api/trainee";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,9 +56,35 @@ const screenOptions = (route, focused) => {
 };
 
 const MainTabNavigator = ({navigation}) => {
+    const dispatch = useDispatch();
+    let {selectedTrainee, loading} = useSelector((state) => state.trainee);
+
+    useEffect(() => {
+        const fetchUserIdAndTrainee = async () => {
+            try {
+                const userId = await SecureStore.getItemAsync('userId');
+                if (userId) {
+                    dispatch(getTraineeById(userId));
+                }
+            } catch (error) {
+                console.error('Failed to fetch userId from SecureStore', error);
+            }
+        };
+
+        fetchUserIdAndTrainee();
+    }, [dispatch]);
+
     const handlePressIcon = () => {
         navigation.navigate('HomeNavigator', {screen: 'Notification'})
     };
+
+    if (loading || !selectedTrainee) {
+        return (
+            <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+                <Spinner size={"large"} color="lightgray"/>
+            </YStack>
+        )
+    }
 
     return (
         <Tab.Navigator
@@ -107,7 +137,7 @@ const MainTabNavigator = ({navigation}) => {
                             <SizableText
                                 size={"$7"}
                                 style={{fontFamily: "PoppinsBold"}}>
-                                Pratama Wibi
+                                {selectedTrainee.name}
                             </SizableText>
                         </YStack>
                     ),

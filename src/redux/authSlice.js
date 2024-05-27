@@ -4,11 +4,10 @@ import {login, logout} from "../api/auth";
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
-        user: null,
         token: null,
-        loading: false,
-        message: null,
+        status: null,
         error: null,
+        loading: false,
     },
     reducers: {
         setToken: (state, action) => {
@@ -19,24 +18,22 @@ const authSlice = createSlice({
         builder
             .addCase(login.pending, (state) => {
                 state.loading = true;
-                state.message = null;
+                state.status = null;
                 state.error = null
             })
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;
                 state.error = null;
-                state.message = action.payload.message;
+                state.status = action.payload.status;
                 state.token = action.payload.data.token;
-                state.user = action.payload.data.user;
             })
             .addCase(login.rejected, (state, action) => {
                 state.error = action.payload;
                 state.loading = false;
-                state.message = null;
             })
             .addCase(logout.fulfilled, (state) => {
                 state.token = null;
-                state.message = null;
+                state.status = null;
                 state.error = null;
             });
     },

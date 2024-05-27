@@ -7,21 +7,22 @@ import CustomSheet from "../../components/CustomSheet";
 import ProfileSection from "../../components/profile/ProfileSection";
 import ProfileSectionEmpty from "../../components/profile/ProfileSectionEmpty";
 import PersonalRow from "../../components/PersonalRow";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {logout} from "../../api/auth";
 import {useToastController} from "@tamagui/toast";
 
 const ProfileScreen = ({navigation}) => {
     const [openSheet, setOpenSheet] = useState(false)
+    const toast = useToastController()
     const dispatch = useDispatch();
 
-    const toast = useToastController()
+    let {selectedTrainee} = useSelector((state) => state.trainee);
 
     const handleLogout = () => {
         dispatch(logout()).then(() => {
             navigation.navigate('Login');
             toast.show('', {
-                message: "Success Logout",
+                message: "Logout Success!",
                 native: false,
             });
         });
@@ -42,20 +43,20 @@ const ProfileScreen = ({navigation}) => {
                         <SizableText
                             style={{fontFamily: 'PoppinsBold'}}
                             size={'$7'}>
-                            Pratama Wibi
+                            {selectedTrainee.name}
                         </SizableText>
                         <XStack>
                             <SizableText
                                 style={{fontFamily: 'PoppinsRegular'}}
                                 size={'$5'}
                                 color={"gray"}>
-                                Trainee Batch 2 Malang{"  |  "}
+                                Trainee {selectedTrainee.batch.name} {selectedTrainee.batch.region}{"  |  "}
                             </SizableText>
                             <SizableText
                                 style={{fontFamily: 'PoppinsRegular'}}
                                 size={'$5'}
                                 color={"gray"}>
-                                S1
+                                {selectedTrainee.education.name}
                             </SizableText>
                         </XStack>
                     </YStack>
@@ -72,9 +73,9 @@ const ProfileScreen = ({navigation}) => {
                         title={"Personal"}
                         content={
                             <YStack gap={"$2"}>
-                                <PersonalRow icon={"location-outline"} text={"Semarang, Jawabarat"}/>
-                                <PersonalRow icon={"call-outline"} text={"+6282123456789"}/>
-                                <PersonalRow icon={"mail-outline"} text={"pratamawibi24@gmail.com"}/>
+                                <PersonalRow icon={"location-outline"} text={selectedTrainee.address}/>
+                                <PersonalRow icon={"call-outline"} text={selectedTrainee.phoneNumber}/>
+                                <PersonalRow icon={"mail-outline"} text={selectedTrainee.userCredential.email}/>
                             </YStack>
                         }
                         onPress={() => navigation.navigate('ProfileNavigator', {screen: 'EditPersonal'})}

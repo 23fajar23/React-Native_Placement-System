@@ -1,4 +1,4 @@
-import {ScrollView, YStack} from "tamagui";
+import {ScrollView, Spinner, YStack} from "tamagui";
 import Logo from '../../../assets/logo.png'
 import CustomInput from "../../components/CustomInput";
 import * as yup from "yup";
@@ -6,11 +6,16 @@ import {useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import PasswordInput from "../../components/PasswordInput";
 import CustomSelect from "../../components/CustomSelect";
-import {educationalStatus} from "../../dummys/educationalStatus";
-import {batches} from "../../dummys/batches";
 import AuthHeader from "../../components/auth/AuthHeader";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import AuthFooter from "../../components/auth/AuthFooter";
+import {useDispatch, useSelector} from "react-redux";
+import React, {useEffect} from "react";
+import {useToastController} from "@tamagui/toast";
+import {registerTrainee} from "../../api/trainee";
+import {getBatches} from "../../api/batch";
+import {getEducations} from "../../api/education";
+import {setStatus} from "../../redux/traineeSlice";
 
 const registerSchema = yup.object({
     name: yup
@@ -43,62 +48,75 @@ const registerSchema = yup.object({
         .required("Password is required"),
 }).required();
 
-const InputFields = ({control, errors}) => (
-    <YStack gap={"$3"}>
-        <CustomInput
-            name={"name"}
-            control={control}
-            icon={"user"}
-            placeholder={"Full Name"}
-            error={errors.name}
-        />
-        <CustomInput
-            name={"mobilePhone"}
-            control={control}
-            icon={"phone"}
-            placeholder={"Phone Number"}
-            error={errors.mobilePhone}
-        />
-        <CustomInput
-            name={"email"}
-            control={control}
-            icon={"envelope"}
-            placeholder={"Email"}
-            error={errors.email}
-        />
-        <CustomInput
-            name={"address"}
-            control={control}
-            icon={"location-dot"}
-            placeholder={"Address"}
-            error={errors.address}
-        />
-        <CustomSelect
-            name={"educationId"}
-            control={control}
-            error={errors.educationId}
-            leftIcon={"graduation-cap"}
-            placeholder={"Select Educational Status"}
-            items={educationalStatus}
-        />
-        <CustomSelect
-            name={"batchId"}
-            control={control}
-            error={errors.batchId}
-            leftIcon={"school"}
-            placeholder={"Select Batch"}
-            items={batches}
-        />
-        <PasswordInput
-            name={"password"}
-            control={control}
-            placeholder={"Password"}
-            error={errors.password}
-        />
-    </YStack>
-);
+const InputFields = ({control, errors}) => {
+    const dispatch = useDispatch()
+    const {batches} = useSelector((state) => state.batch)
+    const {educations} = useSelector((state) => state.education)
+
+    useEffect(() => {
+        dispatch(getBatches())
+        dispatch(getEducations())
+    }, [dispatch]);
+
+    return (
+        <YStack gap={"$3"}>
+            <CustomInput
+                name={"name"}
+                control={control}
+                icon={"user"}
+                placeholder={"Full Name"}
+                error={errors.name}
+            />
+            <CustomInput
+                name={"mobilePhone"}
+                control={control}
+                icon={"phone"}
+                placeholder={"Phone Number"}
+                error={errors.mobilePhone}
+            />
+            <CustomInput
+                name={"email"}
+                control={control}
+                icon={"envelope"}
+                placeholder={"Email"}
+                error={errors.email}
+            />
+            <CustomInput
+                name={"address"}
+                control={control}
+                icon={"location-dot"}
+                placeholder={"Address"}
+                error={errors.address}
+            />
+            <CustomSelect
+                name={"educationId"}
+                control={control}
+                error={errors.educationId}
+                leftIcon={"graduation-cap"}
+                placeholder={"Select Educational Status"}
+                items={educations}
+            />
+            <CustomSelect
+                name={"batchId"}
+                control={control}
+                error={errors.batchId}
+                leftIcon={"school"}
+                placeholder={"Select Batch"}
+                items={batches}
+            />
+            <PasswordInput
+                name={"password"}
+                control={control}
+                placeholder={"Password"}
+                error={errors.password}
+            />
+        </YStack>
+    );
+}
 
 const RegisterScreen = ({navigation}) => {
+    const toast = useToastController()
+
     const {
         control,
         getValues,
@@ -117,9 +135,31 @@ const RegisterScreen = ({navigation}) => {
         resolver: yupResolver(registerSchema),
     });
 
+    const dispatch = useDispatch();
+    const {loading, error, status} = useSelector((state) => state.trainee);
+
+    useEffect(() => {
+            if (status === 201) {
+                toast.show('', {
+                    message: "New Account Created!",
+                    native: false,
+                });
+                navigation.navigate('Login');
+            } else if (error) {
+                toast.show('', {
+                    message: error.message,
+                    native: false,
+                });
+            }
+
+            dispatch(setStatus(null))
+        }, [navigation, toast, error, status]
+    )
+
     const onSubmit = () => {
-        const {name, mobilePhone, email, address, educationId, batchId, password} = getValues()
-        navigation.navigate('Login')
+        const {name, mobilePhone, email, address, educationId, batchId, password} = getValues();
+
+        dispatch(registerTrainee({name, mobilePhone, email, address, educationId, batchId, password}));
     };
 
     const onClickLogin = () => {
@@ -134,7 +174,17 @@ const RegisterScreen = ({navigation}) => {
 
                 <InputFields control={control} errors={errors}/>
 
-                <PrimaryButton onPress={handleSubmit(onSubmit)} title={"Sign Up"}/>
+                <PrimaryButton
+                    onPress={handleSubmit(onSubmit)}
+                    title={
+                        <>
+                            {loading ? (
+                                <Spinner size={"small"} color="lightgray"/>
+                            ) : (
+                                "Sign Up"
+                            )}
+                        </>
+                    }/>
 
                 <AuthFooter onPress={onClickLogin} text={"Login"}/>
             </YStack>

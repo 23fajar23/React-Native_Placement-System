@@ -45,7 +45,7 @@ function App() {
                         <StatusBar style="dark" backgroundColor={"white"} translucent={false}/>
                         <AppNavigator/>
 
-                        <AuthErrorToast/>
+                        <ErrorToast/>
 
                         <ToastViewport flexDirection="column-reverse" top={"$7"} right={0} left={0}/>
                     </YStack>
@@ -55,8 +55,11 @@ function App() {
     )
 }
 
-const AuthErrorToast = () => {
-    const error = useSelector((state) => state.auth.error);
+const ErrorToast = () => {
+    const authError = useSelector((state) => state.auth.error);
+    const traineeError = useSelector((state) => state.trainee.error);
+
+    const error = authError || traineeError
 
     return (
         <CustomToast

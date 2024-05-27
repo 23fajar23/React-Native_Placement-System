@@ -47,7 +47,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                 <Select.Group padding={"$3"} gap={"$3"}>
                                     {useMemo(
                                         () =>
-                                            items.map((item, i) => {
+                                            items.map((item, index) => {
                                                 return (
                                                     <Select.Item
                                                         alignItems={"center"}
@@ -57,7 +57,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                                         borderWidth={"$0.5"}
                                                         borderColor={value === item.id ? "deepskyblue" : "lightgray"}
                                                         borderRadius={"$5"}
-                                                        index={i}
+                                                        index={index}
                                                         key={item.id}
                                                         value={item.id}>
                                                         <Select.ItemText
@@ -66,7 +66,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                                                 fontFamily: "PoppinsRegular",
                                                             }}
                                                             size={"$5"}>
-                                                            {item.name}
+                                                            {item.name} {item.region}
                                                         </Select.ItemText>
                                                         <Select.ItemIndicator>
                                                             <FontAwesome6

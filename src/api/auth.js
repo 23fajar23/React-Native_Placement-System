@@ -2,16 +2,27 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import axiosInstance from "./axiosInstance";
 import * as SecureStore from "expo-secure-store";
 
-export const login = createAsyncThunk('/auth/login', async ({email, password}, {rejectWithValue}) => {
+export const login = createAsyncThunk('auth/login/mobile', async ({email, password}, {rejectWithValue}) => {
         try {
-            const response = await axiosInstance.post('/auth/login', {email, password});
+            const response = await axiosInstance.post('/auth/login/mobile', {email, password});
             const token = response.data.data.token;
+            const userId = response.data.data.user.id
+            await SecureStore.setItemAsync('userId', userId)
             await SecureStore.setItemAsync('userToken', token);
             return response.data;
         } catch (error) {
-            let errorMessage;
+            let errorMessage
             if (error.response) {
-                errorMessage = 'Login Failed!';
+                switch (error.response.status) {
+                    case 400:
+                        errorMessage = 'Invalid Email or Password!';
+                        break;
+                    case 404:
+                        errorMessage = 'User Not Found!';
+                        break;
+                    default:
+                        errorMessage = 'Unknown Error Occurred!';
+                }
             } else if (error.message === 'Network Error') {
                 errorMessage = 'Network Error!';
             }
@@ -20,6 +31,7 @@ export const login = createAsyncThunk('/auth/login', async ({email, password}, {
     })
 ;
 
-export const logout = createAsyncThunk('/auth/logout', async () => {
+export const logout = createAsyncThunk('auth/logout', async () => {
     await SecureStore.deleteItemAsync('userToken');
+    await SecureStore.deleteItemAsync('userId')
 });
