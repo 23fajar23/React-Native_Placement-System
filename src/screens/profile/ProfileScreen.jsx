@@ -50,7 +50,7 @@ const ProfileScreen = ({navigation}) => {
                                 style={{fontFamily: 'PoppinsRegular'}}
                                 size={'$5'}
                                 color={"gray"}>
-                                Trainee {selectedTrainee.batch.name} {selectedTrainee.batch.region}{"  |  "}
+                                {selectedTrainee.batch.name} {selectedTrainee.batch.region}{"  |  "}
                             </SizableText>
                             <SizableText
                                 style={{fontFamily: 'PoppinsRegular'}}
@@ -74,7 +74,7 @@ const ProfileScreen = ({navigation}) => {
                         content={
                             <YStack gap={"$2"}>
                                 <PersonalRow icon={"location-outline"} text={selectedTrainee.address}/>
-                                <PersonalRow icon={"call-outline"} text={selectedTrainee.phoneNumber}/>
+                                <PersonalRow icon={"call-outline"} text={selectedTrainee.mobilePhone}/>
                                 <PersonalRow icon={"mail-outline"} text={selectedTrainee.userCredential.email}/>
                             </YStack>
                         }

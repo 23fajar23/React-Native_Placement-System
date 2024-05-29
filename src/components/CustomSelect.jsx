@@ -5,7 +5,7 @@ import {FontAwesome6} from "@expo/vector-icons";
 import {Controller} from "react-hook-form";
 import CustomSheet from "./CustomSheet";
 
-const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
+const CustomSelect = ({name, leftIcon, control, placeholder, items, error, disabled}) => {
     return (
         <Controller
             name={name}
@@ -14,18 +14,21 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                 <YStack>
                     <Select value={value} onValueChange={onChange} disablePreventBodyScroll>
                         <Select.Trigger
+                            disabled={disabled}
                             alignItems={"center"}
                             size={"$5"}
                             borderColor={"white"}
                             width={"100%"}
                             iconAfter={() =>
-                                <FontAwesome6 name={"caret-down"} size={16} color={value ? "black" : "grey"}/>
+                                <FontAwesome6
+                                    name={"caret-down"} size={16}
+                                    color={value || disabled ? "black" : "grey"}/>
                             }>
                             <YStack position={"absolute"} zIndex={1} left={"$4"}>
                                 <FontAwesome6
                                     name={leftIcon}
                                     size={16}
-                                    color={value ? "black" : "grey"}
+                                    color={value || disabled ? "black" : "grey"}
                                     solid/>
                             </YStack>
                             <Select.Value
@@ -33,7 +36,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                 size={"$5"}
                                 style={{fontFamily: "PoppinsRegular"}}
                                 placeholder={placeholder}
-                                color={value ? "black" : "grey"}>
+                                color={value || disabled ? "black" : "grey"}>
                                 {value ? value.name : placeholder}
                             </Select.Value>
                         </Select.Trigger>
@@ -47,7 +50,7 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error}) => {
                                 <Select.Group padding={"$3"} gap={"$3"}>
                                     {useMemo(
                                         () =>
-                                            items.map((item, index) => {
+                                            items?.map((item, index) => {
                                                 return (
                                                     <Select.Item
                                                         alignItems={"center"}

@@ -1,5 +1,6 @@
 import {createSlice} from "@reduxjs/toolkit";
 import {getBatches} from "../api/batch";
+import {getBatchById} from "../api/batch";
 
 const batchSlice = createSlice({
     name: 'batch',
@@ -20,10 +21,23 @@ const batchSlice = createSlice({
             })
             .addCase(getBatches.fulfilled, (state, action) => {
                 state.loading = false;
-                state.status = action.payload.status;
                 state.batches = action.payload.data;
             })
             .addCase(getBatches.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(getBatchById.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.status = null
+            })
+            .addCase(getBatchById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.selectedBatch = action.payload.data;
+            })
+            .addCase(getBatchById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

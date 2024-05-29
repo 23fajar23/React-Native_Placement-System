@@ -7,27 +7,61 @@ import ApplicationNavigator from "./ApplicationNavigator";
 import HomeNavigator from "./HomeNavigator";
 import ProfileNavigator from "./ProfileNavigator";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
-import {setToken} from "../redux/authSlice";
+import {deleteToken, setStatus, setToken} from "../redux/authSlice";
+import {useToastController} from "@tamagui/toast";
+import {jwtDecode} from "jwt-decode";
+import {Spinner, YStack} from "tamagui";
 
 const AppStack = createNativeStackNavigator();
 
 const AppNavigator = () => {
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const {token} = useSelector((state) => state.auth);
+    const [isCheckingToken, setIsCheckingToken] = useState(true);
+    const toast = useToastController();
 
     useEffect(() => {
         const loadToken = async () => {
-            const storedToken = await SecureStore.getItemAsync("userToken")
+            const storedToken = await SecureStore.getItemAsync("userToken");
             if (storedToken) {
-                dispatch(setToken(storedToken))
+                dispatch(setToken(storedToken));
             }
-            console.log("storedToken", storedToken)
-        }
+            setIsCheckingToken(false);
+        };
 
-        loadToken()
+        loadToken();
     }, [dispatch]);
+
+    useEffect(() => {
+        const checkToken = async () => {
+            if (token) {
+                const decodedToken = jwtDecode(token);
+                const currentTime = Math.floor(Date.now() / 1000);
+                if (decodedToken.exp < currentTime) {
+                    toast.show('', {
+                        message: "Session Has Expired!",
+                        native: false,
+                    });
+                    await SecureStore.deleteItemAsync('userToken');
+                    dispatch(deleteToken());
+                }
+            }
+        };
+
+        if (!isCheckingToken) {
+            checkToken();
+        }
+    }, [dispatch, token, toast, isCheckingToken]);
+
+    if (isCheckingToken) {
+        return (
+            <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+                <Spinner size={"large"} color="lightgray"/>
+            </YStack>
+        );
+    }
 
     return (
         <NavigationContainer>

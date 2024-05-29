@@ -1,11 +1,11 @@
 import axiosInstance from "./axiosInstance";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 
-export const getBatches = createAsyncThunk(
-    'batch/getAll',
-    async (_, {rejectWithValue}) => {
+export const getApplicationsByTraineeId = createAsyncThunk(
+    'application/getAll',
+    async (traineeId, {rejectWithValue}) => {
         try {
-            const response = await axiosInstance.get('/batch/all');
+            const response = await axiosInstance.get(`/customer/${traineeId}`);
             return response.data;
         } catch (error) {
             let errorMessage;
@@ -16,18 +16,21 @@ export const getBatches = createAsyncThunk(
         }
     });
 
-export const getBatchById = createAsyncThunk(
-    `batch/getById`,
-    async (batchId, {rejectWithValue}) => {
+export const getApplicationById = createAsyncThunk(
+    `application/getById`,
+    async (applicationId, {rejectWithValue}) => {
         try {
-            const response = await axiosInstance.get(`/batch/${batchId}`);
+            const response = await axiosInstance.get(`/user_placement/${applicationId}`);
             return response.data
         } catch (error) {
             let errorMessage;
             if (error.response) {
                 switch (error.response.status) {
                     case 400:
-                        errorMessage = 'Invalid ID Batch!';
+                        errorMessage = 'Invalid ID Application!';
+                        break;
+                    case 404:
+                        errorMessage = 'Application Not Found!';
                         break;
                     default:
                         errorMessage = 'Unknown Error Occurred!';

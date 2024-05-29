@@ -20,7 +20,6 @@ const educationSlice = createSlice({
             })
             .addCase(getEducations.fulfilled, (state, action) => {
                 state.loading = false;
-                state.status = action.payload.status;
                 state.educations = action.payload.data;
             })
             .addCase(getEducations.rejected, (state, action) => {

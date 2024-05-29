@@ -12,6 +12,7 @@ import ConfirmationContent from "../../components/ConfirmationContent";
 import {useDispatch, useSelector} from "react-redux";
 import {getTestById} from "../../api/test";
 import {formatDate} from "../../utils/formatDate";
+import {getBatchById} from "../../api/batch";
 
 const TestDetailScreen = ({route}) => {
     const {testId} = route.params;
@@ -19,11 +20,37 @@ const TestDetailScreen = ({route}) => {
     const toast = useToastController()
     const dispatch = useDispatch();
     const {selectedTest, loading} = useSelector((state) => state.test);
-
+    const {batches} = useSelector((state) => state.batch);
 
     useEffect(() => {
         dispatch(getTestById(testId));
     }, [dispatch, testId]);
+
+    useEffect(() => {
+        if (selectedTest && selectedTest.stages.length > 0) {
+            selectedTest.stages[0].quotas[0].quotaBatches.forEach((batch) => {
+                dispatch(getBatchById(batch.id));
+            });
+        }
+    }, [selectedTest, dispatch]);
+
+    const renderQuotaRows = () => {
+        if (!batches.length) return null;
+
+        return selectedTest.stages[0].quotas[0].quotaBatches.map((quotaBatch) => {
+            const batchData = batches.find(batch => batch.id === quotaBatch.id);
+            if (!batchData) return null;
+
+            return (
+                <QuotaRow
+                    key={batchData.id}
+                    batch={batchData.name}
+                    available={`Available: ${quotaBatch.available}`}
+                    color={quotaBatch.available > 0 ? 'deepskyblue' : 'red'}
+                />
+            );
+        });
+    };
 
     return (
         <>
@@ -109,16 +136,7 @@ const TestDetailScreen = ({route}) => {
                                         </XStack>
                                         <Separator width={"100%"} borderWidth={"$0.5"} marginVertical={"$2"}/>
                                         <YStack flex={1} gap={"$1"}>
-                                            <QuotaRow batch={"Batch 14 Jakarta"} available={"Not Available"}
-                                                      color={"red"}/>
-                                            <QuotaRow batch={"Batch 15 Jakarta"} available={"Available: 15"}
-                                                      color={"deepskyblue"}/>
-                                            <QuotaRow batch={"Batch 18 Online"} available={"Not Available"}
-                                                      color={"red"}/>
-                                            <QuotaRow batch={"Batch 1 Malang"} available={"Available : 5"}
-                                                      color={"deepskyblue"}/>
-                                            <QuotaRow batch={"Batch 2 Malang"} available={"Available : 7"}
-                                                      color={"deepskyblue"}/>
+                                            {renderQuotaRows()}
                                         </YStack>
                                     </YStack>
                                 }

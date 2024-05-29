@@ -21,7 +21,6 @@ const testSlice = createSlice({
             })
             .addCase(getTests.fulfilled, (state, action) => {
                 state.loading = false;
-                state.status = action.payload.status;
                 state.tests = action.payload.data;
             })
             .addCase(getTests.rejected, (state, action) => {
@@ -36,7 +35,6 @@ const testSlice = createSlice({
             })
             .addCase(getTestById.fulfilled, (state, action) => {
                 state.loading = false;
-                state.status = action.payload.status;
                 state.selectedTest = action.payload.data;
             })
             .addCase(getTestById.rejected, (state, action) => {

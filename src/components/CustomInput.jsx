@@ -3,13 +3,13 @@ import {FontAwesome6} from "@expo/vector-icons";
 import {Controller} from "react-hook-form";
 import {useState} from "react";
 
-const CustomInput = ({name, control, icon, placeholder, error}) => {
+const CustomInput = ({name, control, icon, placeholder, error, editable}) => {
     const [isFocused, setIsFocused] = useState(false);
 
     const getIconColor = (value, isFocused) => {
         if (isFocused) {
             return 'dodgerblue';
-        } else if (value) {
+        } else if (value && editable) {
             return 'black';
         } else {
             return 'grey';
@@ -31,6 +31,7 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                                 solid/>
                         </YStack>
                         <Input
+                            editable={editable}
                             fontFamily={"PoppinsRegular"}
                             fontSize={"$5"}
                             size={"$5"}
@@ -51,7 +52,8 @@ const CustomInput = ({name, control, icon, placeholder, error}) => {
                             onFocus={() => {
                                 setIsFocused(true)
                             }}
-                            value={value}/>
+                            value={value}
+                            color={editable ? "black" : "gray"}/>
                     </XStack>
                     {error && (
                         <SizableText left={"$5"} marginTop={"$1"} fontSize={"$3"} color={"red"}>

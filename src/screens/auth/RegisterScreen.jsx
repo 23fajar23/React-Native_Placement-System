@@ -12,7 +12,7 @@ import AuthFooter from "../../components/auth/AuthFooter";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
 import {useToastController} from "@tamagui/toast";
-import {registerTrainee} from "../../api/trainee";
+import {registerTrainee} from "../../api/auth";
 import {getBatches} from "../../api/batch";
 import {getEducations} from "../../api/education";
 import {setStatus} from "../../redux/traineeSlice";
@@ -66,6 +66,7 @@ const InputFields = ({control, errors}) => {
                 icon={"user"}
                 placeholder={"Full Name"}
                 error={errors.name}
+                editable
             />
             <CustomInput
                 name={"mobilePhone"}
@@ -73,6 +74,7 @@ const InputFields = ({control, errors}) => {
                 icon={"phone"}
                 placeholder={"Phone Number"}
                 error={errors.mobilePhone}
+                editable
             />
             <CustomInput
                 name={"email"}
@@ -80,6 +82,7 @@ const InputFields = ({control, errors}) => {
                 icon={"envelope"}
                 placeholder={"Email"}
                 error={errors.email}
+                editable
             />
             <CustomInput
                 name={"address"}
@@ -87,6 +90,7 @@ const InputFields = ({control, errors}) => {
                 icon={"location-dot"}
                 placeholder={"Address"}
                 error={errors.address}
+                editable
             />
             <CustomSelect
                 name={"educationId"}
@@ -95,6 +99,7 @@ const InputFields = ({control, errors}) => {
                 leftIcon={"graduation-cap"}
                 placeholder={"Select Educational Status"}
                 items={educations}
+                disabled={false}
             />
             <CustomSelect
                 name={"batchId"}
@@ -103,6 +108,7 @@ const InputFields = ({control, errors}) => {
                 leftIcon={"school"}
                 placeholder={"Select Batch"}
                 items={batches}
+                disabled={false}
             />
             <PasswordInput
                 name={"password"}

@@ -6,31 +6,42 @@ import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
 import LogoCard from "../../components/LogoCard";
 import NoteChip from "../../components/NoteChip";
+import {useDispatch, useSelector} from "react-redux";
+import {getApplicationsByTraineeId} from "../../api/application";
+import * as SecureStore from "expo-secure-store";
+import {getTraineeById} from "../../api/trainee";
+import EmptyList from "../../components/EmptyList";
 
 const ApplicationList = ({handlePressItem}) => {
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const dispatch = useDispatch()
+    const [loading, traineeApplications] = useSelector(state => state.application);
 
     useEffect(() => {
-        api.get('/posts')
-            .then((response) => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.error(error);
-                setLoading(false);
-            });
-    }, []);
+        const fetchUserIdAndTraineeApplications = async () => {
+            try {
+                const userId = await SecureStore.getItemAsync('userId');
+                if (userId) {
+                    dispatch(getApplicationsByTraineeId(userId));
+                }
+            } catch (error) {
+                console.error('Failed to fetch userId from SecureStore', error);
+            }
+        };
+
+        fetchUserIdAndTraineeApplications();
+    }, [dispatch]);
 
     const renderItem = ({item}) => (
-        <TouchableOpacity onPress={handlePressItem}>
-            <Text color={"white"}>{item.title}</Text>
+        <TouchableOpacity onPress={handlePressItem(item.id)}>
             <YStack>
                 <XStack flex={1} gap={"$3"}>
                     <LogoCard icon={Icon}/>
                     <YStack flex={4} gap={"$1"} justifyContent={"center"}>
-                        <SizableText style={{fontFamily: 'PoppinsBold'}} size={'$7'}>Company</SizableText>
+                        <SizableText
+                            style={{fontFamily: 'PoppinsBold'}}
+                            size={'$7'}>
+                            {item.test.company.name}
+                        </SizableText>
                         <SizableText
                             style={{fontFamily: 'PoppinsRegular'}}
                             size={'$5'}
@@ -57,14 +68,18 @@ const ApplicationList = ({handlePressItem}) => {
     return (
         <>
             {loading ? (
-                <Spinner size={"large"} color="lightgray"/>
+                <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+                    <Spinner size={"large"} color="lightgray"/>
+                </YStack>
+            ) : traineeApplications.length === 0 ? (
+                <EmptyList text={"application"}/>
             ) : (
                 <FlatList
-                    data={data}
+                    data={traineeApplications}
                     renderItem={renderItem}
-                    keyExtractor={(item) => item.id.toString()}
+                    keyExtractor={(item) => item.id}
                     showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{paddingHorizontal: 13}}
+                    contentContainerStyle={{paddingHorizontal: 13, paddingVertical: 7, gap: 13}}
                     nestedScrollEnabled
                 />
             )}

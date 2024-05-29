@@ -16,7 +16,7 @@ import React, {useEffect, useState} from "react";
 import {login} from "../../api/auth";
 import {useToastController} from "@tamagui/toast";
 import * as SecureStorage from "expo-secure-store";
-import {setStatus} from "../../redux/traineeSlice";
+import {setStatus} from "../../redux/authSlice";
 
 const loginSchema = yup.object({
     email: yup
@@ -39,6 +39,7 @@ const InputFields = ({control, errors}) => (
             icon={"envelope"}
             placeholder={"Email"}
             error={errors.email}
+            editable
         />
         <PasswordInput
             name={"password"}
@@ -92,35 +93,34 @@ const LoginScreen = ({navigation}) => {
     const {loading, error, status} = useSelector((state) => state.auth);
 
     useEffect(() => {
-            const fetchCredentials = async () => {
-                const savedEmail = SecureStorage.getItem('rememberedEmail');
-                const savedPassword = SecureStorage.getItem('rememberedPassword');
-                if (savedEmail && savedPassword) {
-                    setValue('email', savedEmail);
-                    setValue('password', savedPassword);
-                }
-            };
-            fetchCredentials();
-
-            if (status === 200) {
-                toast.show('', {
-                    message: "Login Success!",
-                    native: false,
-                });
-                navigation.navigate('InitialNavigator');
-            } else if (error) {
-                toast.show('', {
-                    message: error.message,
-                    native: false,
-                });
+        const fetchCredentials = async () => {
+            const savedEmail = SecureStorage.getItem('rememberedEmail');
+            const savedPassword = SecureStorage.getItem('rememberedPassword');
+            if (savedEmail && savedPassword) {
+                setValue('email', savedEmail);
+                setValue('password', savedPassword);
             }
+        };
+        fetchCredentials();
 
-            dispatch(setStatus(null))
-        }, [navigation, toast, error, status]
-    )
+        if (status === 200) {
+            toast.show('', {
+                message: "Login Success!",
+                native: false,
+            });
+            navigation.navigate('InitialNavigator');
+        } else if (error) {
+            toast.show('', {
+                message: error.message,
+                native: false,
+            });
+        }
+
+        dispatch(setStatus(null));
+    }, [navigation, toast, error, status, setValue, dispatch]);
 
     const onSubmit = ({email, password}) => {
-        dispatch(login({email, password}))
+        dispatch(login({email, password}));
 
         if (rememberMe) {
             SecureStorage.setItem('rememberedEmail', email);
@@ -130,7 +130,7 @@ const LoginScreen = ({navigation}) => {
             SecureStorage.deleteItemAsync('rememberedPassword');
         }
 
-        setRememberMe(false)
+        setRememberMe(false);
     };
 
     const onClickRegister = () => {
@@ -192,4 +192,4 @@ const LoginScreen = ({navigation}) => {
     )
 }
 
-export default LoginScreen
+export default LoginScreen;

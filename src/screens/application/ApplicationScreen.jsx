@@ -3,8 +3,8 @@ import ApplicationList from "./ApplicationList";
 
 const ApplicationScreen = ({navigation}) => {
 
-    const handlePressItem = () => {
-        navigation.navigate('ApplicationNavigator', {screen: 'ApplicationDetail'})
+    const handlePressItem = (applicationId) => {
+        navigation.navigate('ApplicationNavigator', {screen: 'ApplicationDetail', params: {applicationId}})
     };
 
     return (

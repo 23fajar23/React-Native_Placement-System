@@ -35,3 +35,30 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     await SecureStore.deleteItemAsync('userToken');
     await SecureStore.deleteItemAsync('userId')
 });
+
+export const registerTrainee = createAsyncThunk(
+    'auth/register/trainee',
+    async (traineeData, {rejectWithValue}) => {
+        try {
+            const response = await axiosInstance.post('/auth/register/customer', traineeData);
+            return response.data;
+        } catch (error) {
+            let errorMessage
+            if (error.response) {
+                switch (error.response.status) {
+                    case 400:
+                        errorMessage = 'Invalid Data!';
+                        break;
+                    case 409:
+                        errorMessage = 'Account Already Exist!';
+                        break;
+                    default:
+                        errorMessage = 'Unknown Error Occurred!';
+                }
+            } else if (error.message === 'Network Error') {
+                errorMessage = 'Network Error!';
+            }
+            return rejectWithValue({message: errorMessage, status: error.response ? error.response.status : null});
+        }
+    }
+);
