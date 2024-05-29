@@ -12,7 +12,7 @@ import EmptyList from "../../components/EmptyList";
 import {getTextStageColor} from "../../utils/getTextStageColor";
 import {getBackgroundStageColor} from "../../utils/getBackgroundStageColor";
 import {ResultEnum} from "../../utils/ResultEnum";
-import {StageStatusEnum} from "../../utils/StageStatusEnum";
+import {getCurrentStage} from "../../utils/getCurrentStage";
 
 const ApplicationList = ({handlePressItem}) => {
     const dispatch = useDispatch();
@@ -35,22 +35,8 @@ const ApplicationList = ({handlePressItem}) => {
         fetchUserIdAndTraineeApplications();
     }, [dispatch]);
 
-    const getStageToShow = (stages) => {
-        let stage = stages.find(stage => stage.stageStatus === StageStatusEnum.ONGOING);
-        if (!stage) {
-            const finishedStages = stages.filter(stage => stage.stageStatus === StageStatusEnum.FINISHED);
-            if (finishedStages.length > 0) {
-                stage = finishedStages[finishedStages.length - 1];
-            }
-        }
-        if (!stage) {
-            stage = stages.find(stage => stage.stageStatus === StageStatusEnum.COMING_SOON);
-        }
-        return stage;
-    };
-
     const renderItem = ({item}) => {
-        const stageToShow = getStageToShow(item.test.stages);
+        const stageToShow = getCurrentStage(item.test.stages);
         const stageIndex = item.test.stages.indexOf(stageToShow);
         const textStageColor = getTextStageColor(stageToShow, stageIndex, item.application.testStageResultList);
         const backgroundStageColor = getBackgroundStageColor(stageToShow, stageIndex, item.application.testStageResultList);

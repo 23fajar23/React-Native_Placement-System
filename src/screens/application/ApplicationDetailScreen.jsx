@@ -8,6 +8,9 @@ import {FontAwesome6} from "@expo/vector-icons";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
 import {getApplicationById} from "../../api/application";
+import {getTextStageColor} from "../../utils/getTextStageColor";
+import {getBackgroundStageColor} from "../../utils/getBackgroundStageColor";
+import {getCurrentStage} from "../../utils/getCurrentStage";
 
 const ApplicationDetailScreen = ({route, navigation}) => {
     const {applicationId} = route.params;
@@ -17,6 +20,9 @@ const ApplicationDetailScreen = ({route, navigation}) => {
     useEffect(() => {
         dispatch(getApplicationById(applicationId))
     }, [dispatch, applicationId]);
+
+    const application = selectedApplication?.customer?.applications?.find(app => app.id === applicationId);
+    let finalResult = application?.finalResult;
 
     return (
         <>
@@ -57,7 +63,7 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                         style={{fontFamily: 'PoppinsRegular'}}
                                         size={'$5'}
                                         color={"deepskyblue"}>
-                                        Role
+                                        {selectedApplication.test.rolePlacement}
                                     </SizableText>
                                 </YStack>
                                 <Separator width={"100%"} borderWidth={"$0.5"}/>
@@ -66,16 +72,16 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                         style={{fontFamily: 'PoppinsRegular'}}
                                         size={'$5'}
                                         color={"gray"}>
-                                        Placement Place
+                                        {selectedApplication.test.placement}
                                     </SizableText>
                                     <XStack gap={"$2"}>
                                         <NoteChip
-                                            text={"All"}
+                                            text={selectedApplication.test.stages[0].quotas[0].type}
                                             textColor={"gray"}
                                             borderColor={"gray"}
                                             backgroundColor={"white"}/>
                                         <NoteChip
-                                            text={"Min. S1"}
+                                            text={`Min. ${selectedApplication.test.education.name}`}
                                             textColor={"gray"}
                                             borderColor={"gray"}
                                             backgroundColor={"white"}/>
@@ -89,14 +95,25 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                 Your Application Status
                             </SizableText>
                             <YStack width={"100%"} alignItems={"center"} gap={"$1"}>
-                                <Stage backgroundColor={"rgba(0, 128, 0, 0.1)"} textColor={"green"}
-                                       title={"Stage 1 : Hackerrank"} date={"28 Jun 2024"}/>
-                                <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
-                                <Stage backgroundColor={"rgba(128, 0, 128, 0.1)"} textColor={"purple"}
-                                       title={"Stage 2 : Interview"} date={"30 Jun 2024"}/>
-                                <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
-                                <Stage backgroundColor={"rgba(0.5, 0.5, 0.5, 0.1)"} textColor={"grey"}
-                                       title={"Stage 3 : Project"} date={"1 Juli 2024"}/>
+                                {selectedApplication.test.stages.map((stage, index) => {
+                                    const currentStage = getCurrentStage(selectedApplication.test.stages);
+                                    const textStageColor = getTextStageColor(stage, index, selectedApplication.customer.applications.testStageResultList);
+                                    const backgroundStageColor = getBackgroundStageColor(stage, index, selectedApplication.customer.applications.testStageResultList);
+
+                                    return (
+                                        <React.Fragment key={index}>
+                                            <Stage
+                                                backgroundColor={backgroundStageColor}
+                                                textColor={textStageColor}
+                                                title={stage.nameStage}
+                                                date={stage.dateTime}
+                                                currentStage={currentStage}/>
+                                            {index !== selectedApplication.test.stages.length - 1 && (
+                                                <FontAwesome6 name={"angle-down"} color={textStageColor} size={24}/>
+                                            )}
+                                        </React.Fragment>
+                                    )
+                                })}
                             </YStack>
                         </YStack>
                     </ScrollView>
@@ -112,7 +129,11 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                         paddingBottom={"$5"}
                         borderTopColor={"lightgrey"}
                         borderTopWidth={"$0.5"}>
-                        <PrimaryButton title={"Discover Another Test"} onPress={() => navigation.navigate("Test")}/>
+                        <PrimaryButton
+                            disabled={finalResult === null}
+                            title={finalResult === null ? "Waiting..." : "Discover Another Test"}
+                            onPress={() => navigation.navigate("Test")}
+                        />
                     </XStack>
                 </>
             )}

@@ -1,7 +1,7 @@
 import {SizableText, YStack} from "tamagui";
 import {FontAwesome6} from "@expo/vector-icons";
 
-const Stage = ({backgroundColor, textColor, title, date}) => {
+const Stage = ({backgroundColor, textColor, title, date, currentStage}) => {
     return (
         <YStack
             flex={1}
@@ -12,6 +12,8 @@ const Stage = ({backgroundColor, textColor, title, date}) => {
             width={"100%"}
             backgroundColor={backgroundColor}>
             <SizableText
+                width={"80%"}
+                textAlign={"center"}
                 style={{fontFamily: 'PoppinsBold'}}
                 size={'$3'}
                 color={textColor}>
@@ -23,14 +25,16 @@ const Stage = ({backgroundColor, textColor, title, date}) => {
                 color={textColor}>
                 {date}
             </SizableText>
-            <YStack position={"absolute"} alignSelf={"flex-end"} right={"$5"}>
-                <FontAwesome6
-                    name={"thumbtack"}
-                    color={textColor}
-                    size={24}
-                    style={{transform: [{rotate: '45deg'}]}}
-                />
-            </YStack>
+            {currentStage && (
+                <YStack position={"absolute"} alignSelf={"flex-end"} right={"$5"}>
+                    <FontAwesome6
+                        name={"thumbtack"}
+                        color={textColor}
+                        size={24}
+                        style={{transform: [{rotate: '45deg'}]}}
+                    />
+                </YStack>
+            )}
         </YStack>
     )
 }
