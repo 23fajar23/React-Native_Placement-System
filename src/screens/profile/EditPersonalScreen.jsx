@@ -12,7 +12,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {updateTrainee} from "../../api/trainee";
 import {setStatus} from "../../redux/traineeSlice";
 import CustomSelect from "../../components/CustomSelect";
-import {StatusEnum} from "../../utils/statusEnum";
+import {StatusEnum} from "../../utils/StatusEnum";
 
 const editProfileSchema = yup.object({
     id: yup

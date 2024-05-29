@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import {getApplicationsByTraineeId} from "../api/application";
+import {createApplication, getApplicationsByTraineeId} from "../api/application";
 import {getApplicationById} from "../api/application";
 
 const applicationSlice = createSlice({
@@ -12,7 +12,14 @@ const applicationSlice = createSlice({
         error: null,
         loading: false,
     },
-    reducers: {},
+    reducers: {
+        setStatus: (state, action) => {
+            state.status = action.payload;
+        },
+        setError: (state, action) => {
+            state.error = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(getApplicationsByTraineeId.pending, (state) => {
@@ -41,8 +48,25 @@ const applicationSlice = createSlice({
             .addCase(getApplicationById.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
+            })
+
+            .addCase(createApplication.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+                state.status = null
+            })
+            .addCase(createApplication.fulfilled, (state, action) => {
+                state.loading = false;
+                state.status = action.payload.status;
+            })
+            .addCase(createApplication.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
 });
+
+export const {setStatus, setError} = applicationSlice.actions
+
 
 export default applicationSlice.reducer;

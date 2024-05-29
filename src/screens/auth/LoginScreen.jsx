@@ -108,6 +108,8 @@ const LoginScreen = ({navigation}) => {
                 message: "Login Success!",
                 native: false,
             });
+
+            setRememberMe(false);
             navigation.navigate('InitialNavigator');
         } else if (error) {
             toast.show('', {
@@ -129,8 +131,6 @@ const LoginScreen = ({navigation}) => {
             SecureStorage.deleteItemAsync('rememberedEmail');
             SecureStorage.deleteItemAsync('rememberedPassword');
         }
-
-        setRememberMe(false);
     };
 
     const onClickRegister = () => {

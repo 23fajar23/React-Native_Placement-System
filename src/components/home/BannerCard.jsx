@@ -1,10 +1,24 @@
 import {Image, SizableText, XStack, YStack} from "tamagui";
-import {Dimensions, TouchableOpacity} from "react-native";
+import {Dimensions, Linking, TouchableOpacity} from "react-native";
+import {useToastController} from "@tamagui/toast";
 
 const {width: deviceWidth} = Dimensions.get('window');
 const cardWidth = deviceWidth * 0.9;
 
-const BannerCard = ({background, title, textButton, image}) => {
+const BannerCard = ({background, title, textButton, image, link}) => {
+    const toast = useToastController()
+
+    const handlePress = () => {
+        if (link) {
+            Linking.openURL(link).catch(
+                toast.show('', {
+                    message: 'Failed to open link!',
+                    native: false,
+                })
+            );
+        }
+    };
+
     return (
         <XStack
             flex={1}
@@ -28,7 +42,7 @@ const BannerCard = ({background, title, textButton, image}) => {
                     color={"white"}>
                     {title}
                 </SizableText>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={handlePress}>
                     <SizableText
                         style={{fontFamily: 'PoppinsRegular'}}
                         size={'$3'}

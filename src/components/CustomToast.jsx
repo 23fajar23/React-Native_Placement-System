@@ -2,7 +2,7 @@ import {SizableText, XStack, YStack} from "tamagui";
 import {Toast, useToastState} from "@tamagui/toast";
 import {FontAwesome6} from "@expo/vector-icons";
 
-const CustomToast = ({backgroundColor, borderColor, iconColor}) => {
+const CustomToast = ({backgroundColor, borderColor, icon, iconColor}) => {
     const toast = useToastState()
 
     if (!toast || toast.isHandledNatively) return null
@@ -23,7 +23,7 @@ const CustomToast = ({backgroundColor, borderColor, iconColor}) => {
             animation="100ms"
             viewportName={toast.viewportName}>
             <XStack alignItems={"center"} gap={"$3"}>
-                <FontAwesome6 name={"square-check"} color={iconColor} size={24} solid/>
+                <FontAwesome6 name={icon} color={iconColor} size={24} solid/>
                 <YStack>
                     <SizableText
                         top={"$1"}

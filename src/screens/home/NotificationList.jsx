@@ -4,6 +4,7 @@ import React, {useEffect, useState} from "react";
 import api from "../../api/auth";
 import IconCircleCard from "../../components/IconCircleCard";
 import NoteChip from "../../components/NoteChip";
+import EmptyList from "../../components/EmptyList";
 
 const NotificationList = () => {
     const [data, setData] = useState([]);
@@ -69,22 +70,22 @@ const NotificationList = () => {
     ;
 
     return (
-        <YStack
-            flex={1}
-            backgroundColor={"white"}
-            alignItems={"center"}
-            justifyContent={"center"}
-            paddingHorizontal={"$3"}>
+        <>
             {loading ? (
-                <Spinner size={"large"} color="lightgray"/>
+                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
+                    <Spinner size={"large"} color="lightgray"/>
+                </YStack>
+            ) : data.length === 0 ? (
+                <EmptyList text={"placement test"}/>
             ) : (
                 <FlatList
                     data={data}
                     renderItem={renderItem}
                     keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={{paddingHorizontal: 13, paddingVertical: 7, gap: 13}}
                     showsVerticalScrollIndicator={false}/>
             )}
-        </YStack>
+        </>
     );
 };
 

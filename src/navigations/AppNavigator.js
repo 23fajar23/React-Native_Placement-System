@@ -9,7 +9,7 @@ import ProfileNavigator from "./ProfileNavigator";
 import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect, useState} from "react";
 import * as SecureStore from "expo-secure-store";
-import {deleteToken, setStatus, setToken} from "../redux/authSlice";
+import {deleteToken, setToken} from "../redux/authSlice";
 import {useToastController} from "@tamagui/toast";
 import {jwtDecode} from "jwt-decode";
 import {Spinner, YStack} from "tamagui";
@@ -57,7 +57,7 @@ const AppNavigator = () => {
 
     if (isCheckingToken) {
         return (
-            <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+            <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
                 <Spinner size={"large"} color="lightgray"/>
             </YStack>
         );

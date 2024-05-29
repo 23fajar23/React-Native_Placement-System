@@ -27,20 +27,6 @@ const batchSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload;
             })
-
-            .addCase(getBatchById.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.status = null
-            })
-            .addCase(getBatchById.fulfilled, (state, action) => {
-                state.loading = false;
-                state.selectedBatch = action.payload.data;
-            })
-            .addCase(getBatchById.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload;
-            });
     },
 });
 

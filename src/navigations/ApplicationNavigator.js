@@ -1,5 +1,5 @@
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Circle, SizableText, XStack, YStack} from "tamagui";
+import {SizableText, XStack, YStack} from "tamagui";
 import {TouchableOpacity} from "react-native";
 import {FontAwesome6, Ionicons} from "@expo/vector-icons";
 import ApplicationDetailScreen from "../screens/application/ApplicationDetailScreen";
@@ -40,6 +40,7 @@ const ApplicationNavigator = () => {
                                     <StageColorInfo color={"red"} text={"Failed"}/>
                                     <StageColorInfo color={"green"} text={"Passed"}/>
                                     <StageColorInfo color={"deepskyblue"} text={"Onboard"}/>
+                                    <StageColorInfo color={"grey"} text={"Coming Soon"}/>
                                     <XStack alignItems={"center"} gap={"$3"} marginLeft={"$1.5"}>
                                         <FontAwesome6
                                             name={"thumbtack"}

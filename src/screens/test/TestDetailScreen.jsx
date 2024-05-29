@@ -12,50 +12,91 @@ import ConfirmationContent from "../../components/ConfirmationContent";
 import {useDispatch, useSelector} from "react-redux";
 import {getTestById} from "../../api/test";
 import {formatDate} from "../../utils/formatDate";
-import {getBatchById} from "../../api/batch";
+import {createApplication} from "../../api/application";
+import * as SecureStore from "expo-secure-store";
+import {setError, setStatus} from "../../redux/applicationSlice";
 
-const TestDetailScreen = ({route}) => {
+const TestDetailScreen = ({route, navigation}) => {
     const {testId} = route.params;
     const [openSheet, setOpenSheet] = useState(false)
     const toast = useToastController()
     const dispatch = useDispatch();
-    const {selectedTest, loading} = useSelector((state) => state.test);
-    const {batches} = useSelector((state) => state.batch);
+    const {selectedTest, loading: loadingTest} = useSelector((state) => state.test);
+    const {loading: loadingApply, status, error} = useSelector((state) => state.application);
 
     useEffect(() => {
+        dispatch(setError(null))
+
         dispatch(getTestById(testId));
     }, [dispatch, testId]);
 
     useEffect(() => {
-        if (selectedTest && selectedTest.stages.length > 0) {
-            selectedTest.stages[0].quotas[0].quotaBatches.forEach((batch) => {
-                dispatch(getBatchById(batch.id));
-            });
-        }
-    }, [selectedTest, dispatch]);
+            if (status === 200) {
+                toast.show('', {
+                    message: 'Successfully Applied Test!',
+                    native: false,
+                });
+                navigation.navigate('InitialNavigator', {screen: 'Application'});
+            } else if (error) {
+                toast.show('', {
+                    message: error.message,
+                    native: false,
+                });
+            }
+
+            dispatch(setStatus(null))
+        }, [navigation, toast, error, status, dispatch]
+    )
 
     const renderQuotaRows = () => {
-        if (!batches.length) return null;
+        const quota = selectedTest.stages[0].quotas[0];
+        const quotaBatches = quota.quotaBatches;
 
-        return selectedTest.stages[0].quotas[0].quotaBatches.map((quotaBatch) => {
-            const batchData = batches.find(batch => batch.id === quotaBatch.id);
-            if (!batchData) return null;
-
+        if (quota.type === 'ALL') {
             return (
                 <QuotaRow
-                    key={batchData.id}
-                    batch={batchData.name}
-                    available={`Available: ${quotaBatch.available}`}
-                    color={quotaBatch.available > 0 ? 'deepskyblue' : 'red'}
+                    key="all"
+                    batch="ALL BATCH"
+                    available={quota.available > 0 ? `Available: ${quota.available}` : 'Not Available'}
+                    color={quota.available > 0 ? 'deepskyblue' : 'red'}
                 />
             );
-        });
+        } else {
+            return quotaBatches.map((quotaBatch) => {
+                return (
+                    <QuotaRow
+                        key={quotaBatch.id}
+                        batch={`${quotaBatch.batch.name} ${quotaBatch.batch.region}`}
+                        available={quotaBatch.quotaAvailable > 0 ? `Available: ${quotaBatch.quotaAvailable}` : 'Not Available'}
+                        color={quotaBatch.quotaAvailable > 0 ? 'deepskyblue' : 'red'}
+                    />
+                );
+            });
+        }
+    };
+
+    const handleApply = async () => {
+        const customerId = await SecureStore.getItemAsync('userId');
+
+        if (customerId) {
+            console.log("userId", customerId)
+            console.log("testId", testId)
+            const applicationData = {customerId, testId};
+            dispatch(createApplication(applicationData));
+            setOpenSheet(false);
+        } else {
+            toast.show('', {
+                message: "Trainee ID Not Found!",
+                native: false,
+            });
+            setOpenSheet(false);
+        }
     };
 
     return (
         <>
-            {loading || !selectedTest ? (
-                <YStack flex={1} alignItems={"center"} justifyContent={"center"}>
+            {loadingTest || !selectedTest ? (
+                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
                     <Spinner size={"large"} color="lightgray"/>
                 </YStack>
             ) : (
@@ -166,7 +207,18 @@ const TestDetailScreen = ({route}) => {
                         paddingBottom={"$5"}
                         borderTopColor={"lightgrey"}
                         borderTopWidth={"$0.5"}>
-                        <PrimaryButton title={"Apply"} onPress={() => setOpenSheet(true)}/>
+                        <PrimaryButton
+                            title={
+                                <>
+                                    {loadingApply ? (
+                                        <Spinner size={"small"} color="lightgray"/>
+                                    ) : (
+                                        "Apply"
+                                    )}
+                                </>
+                            }
+                            onPress={() => setOpenSheet(true)}
+                        />
                     </XStack>
 
                     <CustomSheet
@@ -180,11 +232,8 @@ const TestDetailScreen = ({route}) => {
                                 buttonText={"Yes, Apply"}
                                 onPressSecondary={() => setOpenSheet(false)}
                                 onPressPrimary={() => {
+                                    handleApply()
                                     setOpenSheet(false)
-                                    toast.show('Successfully saved!', {
-                                        message: "Don't worry, we've got your data.",
-                                        native: false,
-                                    })
                                 }}
                             />
                         }

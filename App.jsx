@@ -58,13 +58,15 @@ function App() {
 const ErrorToast = () => {
     const authError = useSelector((state) => state.auth.error);
     const traineeError = useSelector((state) => state.trainee.error);
+    const applicationError = useSelector((state) => state.application.error);
 
-    const error = authError || traineeError
+    const error = authError || traineeError || applicationError
 
     return (
         <CustomToast
             backgroundColor={error ? "#fff3f3" : "#eff2ff"}
             borderColor={error ? "red" : "deepskyblue"}
+            icon={error ? "square-xmark" : "square-check"}
             iconColor={error ? "red" : "deepskyblue"}
         />
     );

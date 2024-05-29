@@ -10,7 +10,7 @@ export const getTests = createAsyncThunk(
         } catch (error) {
             let errorMessage;
             if (error.message === 'Network Error') {
-                errorMessage = 'Network Error!';
+                errorMessage = 'Network error!';
             }
             return rejectWithValue({message: errorMessage, status: error.response ? error.response.status : null});
         }
@@ -28,16 +28,16 @@ export const getTestById = createAsyncThunk(
             if (error.response) {
                 switch (error.response.status) {
                     case 400:
-                        errorMessage = 'Invalid ID Test!';
+                        errorMessage = 'Invalid ID test!';
                         break;
                     case 404:
-                        errorMessage = 'Test Not Found!';
+                        errorMessage = 'Test not found!';
                         break;
                     default:
-                        errorMessage = 'Unknown Error Occurred!';
+                        errorMessage = 'Unknown error occurred!';
                 }
             } else if (error.message === 'Network Error') {
-                errorMessage = 'Network Error!';
+                errorMessage = 'Network error!';
             }
             return rejectWithValue({
                 message: errorMessage,
