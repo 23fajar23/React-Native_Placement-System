@@ -6,33 +6,40 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import Stage from "../../components/stage/Stage";
 import {FontAwesome6} from "@expo/vector-icons";
 import {useDispatch, useSelector} from "react-redux";
-import React, {useEffect} from "react";
-import {getApplicationById} from "../../api/application";
+import React, {useEffect, useState} from "react";
 import {getTextStageColor} from "../../utils/getTextStageColor";
 import {getBackgroundStageColor} from "../../utils/getBackgroundStageColor";
 import {getCurrentStage} from "../../utils/getCurrentStage";
+import {ResultEnum} from "../../utils/ResultEnum";
+import {setSelectedApplication} from "../../redux/applicationSlice";
 
 const ApplicationDetailScreen = ({route, navigation}) => {
-    const {applicationId} = route.params;
+    const {application} = route.params;
     const dispatch = useDispatch();
-    const {selectedApplication, loading} = useSelector((state) => state.application);
+    const {selectedApplication} = useSelector((state) => state.application);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(getApplicationById(applicationId))
-    }, [dispatch, applicationId]);
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 500);
+        return () => clearTimeout(timer);
+    }, []);
 
-    const application = selectedApplication?.customer?.applications?.find(app => app.id === applicationId);
-    let finalResult = application?.finalResult;
+    useEffect(() => {
+        dispatch(setSelectedApplication(application))
+    }, [dispatch, application]);
+
+    let finalResult = selectedApplication?.application?.finalResult;
+    let testStageResultList = selectedApplication?.application?.testStageResultList;
 
     return (
         <>
-            {loading || !selectedApplication ? (
-                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
-                    <Spinner size={"large"} color="lightgray"/>
-                </YStack>
-            ) : (
+            {!loading && selectedApplication ? (
                 <>
-                    <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
+                    <ScrollView
+                        backgroundColor={"white"}
+                        showsVerticalScrollIndicator={false}>
                         <YStack
                             flex={1}
                             alignItems={"center"}
@@ -97,8 +104,14 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                             <YStack width={"100%"} alignItems={"center"} gap={"$1"}>
                                 {selectedApplication.test.stages.map((stage, index) => {
                                     const currentStage = getCurrentStage(selectedApplication.test.stages);
-                                    const textStageColor = getTextStageColor(stage, index, selectedApplication.customer.applications.testStageResultList);
-                                    const backgroundStageColor = getBackgroundStageColor(stage, index, selectedApplication.customer.applications.testStageResultList);
+                                    const textStageColor = getTextStageColor(stage, index, testStageResultList);
+                                    const backgroundStageColor = getBackgroundStageColor(stage, index, testStageResultList);
+
+                                    const previousStageFailed = index > 0 && testStageResultList?.[index - 1]?.result === ResultEnum.FAILED;
+
+                                    if (previousStageFailed) {
+                                        return null;
+                                    }
 
                                     return (
                                         <React.Fragment key={index}>
@@ -107,13 +120,21 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                                 textColor={textStageColor}
                                                 title={stage.nameStage}
                                                 date={stage.dateTime}
-                                                currentStage={currentStage}/>
-                                            {index !== selectedApplication.test.stages.length - 1 && (
-                                                <FontAwesome6 name={"angle-down"} color={textStageColor} size={24}/>
+                                                currentStage={(stage === currentStage) && finalResult !== ResultEnum.PASSED}/>
+                                            {((index !== selectedApplication.test.stages.length - 1 && previousStageFailed) || finalResult === ResultEnum.PASSED) && (
+                                                <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
                                             )}
                                         </React.Fragment>
                                     )
                                 })}
+                                {finalResult === ResultEnum.PASSED && (
+                                    <Stage
+                                        backgroundColor={"rgba(0, 191, 255, 0.1)"}
+                                        textColor={"deepskyblue"}
+                                        title={"ONBOARD"}
+                                        date={"-"}
+                                        currentStage={false}/>
+                                )}
                             </YStack>
                         </YStack>
                     </ScrollView>
@@ -136,9 +157,13 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                         />
                     </XStack>
                 </>
+            ) : (
+                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
+                    <Spinner size={"large"} color="lightgray"/>
+                </YStack>
             )}
         </>
     )
 }
 
-export default ApplicationDetailScreen
+export default ApplicationDetailScreen;

@@ -12,7 +12,6 @@ import {useDispatch, useSelector} from "react-redux";
 import React, {useEffect} from "react";
 import * as SecureStore from "expo-secure-store";
 import {getTraineeById} from "../api/trainee";
-import {setStatus} from "../redux/traineeSlice";
 
 const Tab = createBottomTabNavigator();
 
@@ -89,6 +88,7 @@ const MainTabNavigator = ({navigation}) => {
 
     return (
         <Tab.Navigator
+            initialRouteName={"Home"}
             screenOptions={({route}) => ({
                 tabBarItemStyle: {
                     height: 44,
@@ -142,13 +142,13 @@ const MainTabNavigator = ({navigation}) => {
                             </SizableText>
                         </YStack>
                     ),
-                    headerRight: () => (
-                        <YStack marginRight={"$4"}>
-                            <TouchableOpacity onPress={() => handlePressIcon('HomeNavigator', 'Notification')}>
-                                <FontAwesome6 name={"bell"} size={24}/>
-                            </TouchableOpacity>
-                        </YStack>
-                    ),
+                    // headerRight: () => (
+                    //     <YStack marginRight={"$4"}>
+                    //         <TouchableOpacity onPress={() => handlePressIcon('HomeNavigator', 'Notification')}>
+                    //             <FontAwesome6 name={"bell"} size={24}/>
+                    //         </TouchableOpacity>
+                    //     </YStack>
+                    // ),
                 }}
             />
             <Tab.Screen

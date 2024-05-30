@@ -138,7 +138,7 @@ const LoginScreen = ({navigation}) => {
     };
 
     return (
-        <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
+        <ScrollView backgroundColor={"white"}flex={1} showsVerticalScrollIndicator={false}>
             <YStack flex={1} backgroundColor={"white"} gap={"$5"} alignItems={'center'} padding={"$3"}>
                 <AuthHeader logo={Logo} title={"Login to Your Account"}/>
 
@@ -180,11 +180,11 @@ const LoginScreen = ({navigation}) => {
 
                 <TouchableOpacity>
                     <SizableText style={{fontFamily: 'PoppinsRegular'}} size={'$5'} color={"deepskyblue"}>
-                        Forgot the password?
+                        Forgot password?
                     </SizableText>
                 </TouchableOpacity>
 
-                <LoginAlternatives/>
+                {/*<LoginAlternatives/>*/}
 
                 <AuthFooter onPress={onClickRegister} text={"Sign Up"}/>
             </YStack>

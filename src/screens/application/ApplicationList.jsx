@@ -1,6 +1,6 @@
-import {Separator, SizableText, Spinner, XStack, YStack} from "tamagui";
-import {FlatList, TouchableOpacity} from "react-native";
-import React, {useEffect} from "react";
+import {Separator, SizableText, XStack, YStack} from "tamagui";
+import {FlatList, RefreshControl, TouchableOpacity} from "react-native";
+import React, {useState} from "react";
 import Icon from "../../../assets/icon.png";
 import {FontAwesome6} from "@expo/vector-icons";
 import LogoCard from "../../components/LogoCard";
@@ -16,33 +16,25 @@ import {getCurrentStage} from "../../utils/getCurrentStage";
 
 const ApplicationList = ({handlePressItem}) => {
     const dispatch = useDispatch();
-    const {loading, traineeApplications} = useSelector(state => state.application);
+    const {traineeApplications} = useSelector(state => state.application);
+    const [refreshing, setRefreshing] = useState(false);
 
     const reversedTraineeApplications = [...traineeApplications].reverse();
 
-    useEffect(() => {
-        const fetchUserIdAndTraineeApplications = async () => {
-            try {
-                const userId = await SecureStore.getItemAsync('userId');
-                if (userId) {
-                    dispatch(getApplicationsByTraineeId(userId));
-                }
-            } catch (error) {
-                console.error('Failed to fetch userId from SecureStore', error);
-            }
-        };
-
-        fetchUserIdAndTraineeApplications();
-    }, [dispatch]);
+    const handleRefresh = async () => {
+        setRefreshing(true);
+        await dispatch(getApplicationsByTraineeId(await SecureStore.getItemAsync('userId')));
+        setRefreshing(false);
+    };
 
     const renderItem = ({item}) => {
-        const stageToShow = getCurrentStage(item.test.stages);
-        const stageIndex = item.test.stages.indexOf(stageToShow);
-        const textStageColor = getTextStageColor(stageToShow, stageIndex, item.application.testStageResultList);
-        const backgroundStageColor = getBackgroundStageColor(stageToShow, stageIndex, item.application.testStageResultList);
+        const currentStage = getCurrentStage(item.test.stages);
+        const stageIndex = item.test.stages.indexOf(currentStage);
+        const textStageColor = getTextStageColor(currentStage, stageIndex, item.application.testStageResultList);
+        const backgroundStageColor = getBackgroundStageColor(currentStage, stageIndex, item.application.testStageResultList);
 
         return (
-            <TouchableOpacity onPress={() => handlePressItem(item.application.id)}>
+            <TouchableOpacity onPress={() => handlePressItem(item)}>
                 <YStack>
                     <XStack flex={1} gap={"$3"}>
                         <LogoCard icon={Icon}/>
@@ -62,12 +54,12 @@ const ApplicationList = ({handlePressItem}) => {
                                 {item.application.finalResult === ResultEnum.PASSED ? (
                                     <NoteChip
                                         text={"Onboard"}
-                                        textColor={"white"}
-                                        backgroundColor={"blue"}
-                                        borderColor={"blue"}/>
+                                        textColor={"deepskyblue"}
+                                        backgroundColor={"rgba(0, 191, 255, 0.1)"}
+                                        borderColor={"rgba(0, 191, 255, 0.1)"}/>
                                 ) : (
                                     <NoteChip
-                                        text={stageToShow ? stageToShow.nameStage : "No Stage"}
+                                        text={currentStage ? currentStage.nameStage : "No Stage"}
                                         textColor={textStageColor}
                                         backgroundColor={backgroundStageColor}
                                         borderColor={backgroundStageColor}/>
@@ -86,11 +78,7 @@ const ApplicationList = ({handlePressItem}) => {
 
     return (
         <>
-            {loading ? (
-                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
-                    <Spinner size={"large"} color="lightgray"/>
-                </YStack>
-            ) : traineeApplications.length === 0 ? (
+            {traineeApplications.length === 0 && !refreshing ? (
                 <EmptyList text={"application"}/>
             ) : (
                 <FlatList
@@ -100,6 +88,9 @@ const ApplicationList = ({handlePressItem}) => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 13, paddingVertical: 7, gap: 13}}
                     nestedScrollEnabled
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>
+                    }
                 />
             )}
         </>

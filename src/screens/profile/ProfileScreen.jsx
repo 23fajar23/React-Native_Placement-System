@@ -82,7 +82,7 @@ const ProfileScreen = ({navigation}) => {
                     />
                     <ProfileSectionEmpty icon={"clipboard-list"} title={"Summary"}/>
                     <ProfileSectionEmpty icon={"lightbulb"} title={"Skills"}/>
-                    <ProfileSectionEmpty icon={"file"} title={"CV/Resume"}/>
+                    {/*<ProfileSectionEmpty icon={"file"} title={"CV/Resume"}/>*/}
                 </YStack>
             </YStack>
 

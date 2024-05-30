@@ -11,7 +11,6 @@ import {useToastController} from "@tamagui/toast";
 import {useDispatch, useSelector} from "react-redux";
 import {updateTrainee} from "../../api/trainee";
 import {setStatus} from "../../redux/traineeSlice";
-import CustomSelect from "../../components/CustomSelect";
 import {StatusEnum} from "../../utils/StatusEnum";
 
 const editProfileSchema = yup.object({
@@ -80,24 +79,24 @@ const InputFields = ({control, errors}) => {
                 error={errors.email}
                 editable={false}
             />
-            <CustomSelect
-                name={"educationId"}
-                control={control}
-                error={errors.educationId}
-                leftIcon={"graduation-cap"}
-                placeholder={'Select Educational Status'}
-                items={[]}
-                disabled={true}
-            />
-            <CustomSelect
-                name={"batchId"}
-                control={control}
-                error={errors.batchId}
-                leftIcon={"school"}
-                placeholder={'Select Batch'}
-                items={[]}
-                disabled={true}
-            />
+            {/*<CustomSelect*/}
+            {/*    name={"educationId"}*/}
+            {/*    control={control}*/}
+            {/*    error={errors.educationId}*/}
+            {/*    leftIcon={"graduation-cap"}*/}
+            {/*    placeholder={'Select Educational Status'}*/}
+            {/*    items={[]}*/}
+            {/*    disabled={true}*/}
+            {/*/>*/}
+            {/*<CustomSelect*/}
+            {/*    name={"batchId"}*/}
+            {/*    control={control}*/}
+            {/*    error={errors.batchId}*/}
+            {/*    leftIcon={"school"}*/}
+            {/*    placeholder={'Select Batch'}*/}
+            {/*    items={[]}*/}
+            {/*    disabled={true}*/}
+            {/*/>*/}
         </YStack>
     )
 }

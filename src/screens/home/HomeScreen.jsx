@@ -1,12 +1,12 @@
 import {ScrollView, SizableText, Spinner, XStack, YStack} from "tamagui";
 import BannerCard from "../../components/home/BannerCard";
-import background from "../../../assets/images/background.png"
-import woman_work from "../../../assets/images/woman-work.png"
-import people_group from "../../../assets/images/people_group.png"
-import person_with_laptop from "../../../assets/images/person_with_laptop.png"
+import background from "../../../assets/images/background.png";
+import woman_work from "../../../assets/images/woman-work.png";
+import people_group from "../../../assets/images/people_group.png";
+import person_with_laptop from "../../../assets/images/person_with_laptop.png";
 import StatisticCard from "../../components/home/StatisticCard";
-import {TouchableOpacity} from "react-native";
-import React, {useEffect} from "react";
+import {RefreshControl, TouchableOpacity} from "react-native";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {getTests} from "../../api/test";
 import TestItem from "../test/TestItem";
@@ -20,12 +20,11 @@ const HomeScreen = ({navigation}) => {
     const {tests, loading} = useSelector((state) => state.test);
     const {traineeApplications} = useSelector((state) => state.application);
     const bookmarked = useSelector((state) => state.bookmark.bookmarkedTests);
+    const [refreshing, setRefreshing] = useState(false);
 
     useEffect(() => {
         dispatch(getTests());
-    }, [dispatch]);
 
-    useEffect(() => {
         const fetchUserIdAndTraineeApplications = async () => {
             try {
                 const userId = await SecureStore.getItemAsync('userId');
@@ -46,7 +45,7 @@ const HomeScreen = ({navigation}) => {
     const activeApplicationsCount = traineeApplications.filter(application => application.finalResult === null).length;
 
     const handleToTestList = () => {
-        navigation.navigate('InitialNavigator', {screen: 'Test'})
+        navigation.navigate('InitialNavigator', {screen: 'Test'});
     };
 
     const handlePressItem = (testId) => {
@@ -57,8 +56,20 @@ const HomeScreen = ({navigation}) => {
         dispatch(toggleBookmark(id));
     };
 
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await dispatch(getTests());
+        await dispatch(getApplicationsByTraineeId(await SecureStore.getItemAsync('userId')));
+        setRefreshing(false);
+    };
+
     return (
-        <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
+        <ScrollView
+            backgroundColor={"white"}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+            }>
             <YStack flex={1} padding={"$3"} gap={"$5"}>
                 <ScrollView
                     flex={1}
@@ -128,7 +139,7 @@ const HomeScreen = ({navigation}) => {
                         <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
                             <Spinner size={"large"} color="lightgray"/>
                         </YStack>
-                    ) : reversedTests.length === 0 ? (
+                    ) : reversedTests.length === 0 && !refreshing ? (
                         <EmptyList text={"recent placement test"}/>
                     ) : (
                         reversedTests.map(test => (
@@ -148,4 +159,4 @@ const HomeScreen = ({navigation}) => {
     )
 }
 
-export default HomeScreen
+export default HomeScreen;

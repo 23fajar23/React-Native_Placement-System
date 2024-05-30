@@ -1,34 +1,32 @@
-import React, {useEffect} from 'react';
-import {FlatList} from 'react-native';
+import React, {useState} from 'react';
+import {FlatList, RefreshControl} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getTests} from '../../api/test';
 import {toggleBookmark} from '../../redux/bookmarkSlice';
 import EmptyList from '../../components/EmptyList';
 import TestItem from './TestItem';
-import {Spinner, YStack} from "tamagui";  // Adjust the import path if necessary
 
 const TestList = ({handlePressItem}) => {
     const dispatch = useDispatch();
-    const {loading, tests} = useSelector((state) => state.test);
+    const {tests} = useSelector((state) => state.test);
     const bookmarked = useSelector((state) => state.bookmark.bookmarkedTests);
-
-    useEffect(() => {
-        dispatch(getTests());
-    }, [dispatch]);
+    const [refreshing, setRefreshing] = useState(false);
 
     const handleToggleBookmark = (id) => {
         dispatch(toggleBookmark(id));
+    };
+
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await dispatch(getTests());
+        setRefreshing(false);
     };
 
     const reversedTests = [...tests].reverse();
 
     return (
         <>
-            {loading ? (
-                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
-                    <Spinner size={"large"} color="lightgray"/>
-                </YStack>
-            ) : tests.length === 0 ? (
+            {tests.length === 0 && !refreshing ? (
                 <EmptyList text={"placement test"}/>
             ) : (
                 <FlatList
@@ -45,6 +43,9 @@ const TestList = ({handlePressItem}) => {
                     showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingHorizontal: 13, paddingVertical: 7, gap: 13}}
                     nestedScrollEnabled
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+                    }
                 />
             )}
         </>

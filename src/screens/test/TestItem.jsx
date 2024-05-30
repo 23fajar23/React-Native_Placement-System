@@ -9,7 +9,7 @@ import {formatDate} from '../../utils/formatDate';
 
 const TestItem = ({item, handlePressItem, handleToggleBookmark, isBookmarked}) => {
     return (
-        <TouchableOpacity onPress={() => handlePressItem(item.id)}>
+        <TouchableOpacity onPress={() => handlePressItem(item)}>
             <YStack
                 flex={1}
                 gap={"$3"}

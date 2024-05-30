@@ -1,15 +1,16 @@
+import {StageStatusEnum} from "./StageStatusEnum";
+import {ResultEnum} from "./ResultEnum";
+
 export const getTextStageColor = (stage, index, testStageResultList) => {
-    if (stage.stageStatus === 'ONGOING') {
-        if (index === 0) return 'yellow';
-        if (index === 1) return 'orange';
-        if (index === 2) return 'purple';
+    if (stage.stageStatus === StageStatusEnum.ONGOING) {
+        return 'orange';
     }
-    if (stage.stageStatus === 'FINISHED') {
+    if (stage.stageStatus === StageStatusEnum.FINISHED) {
         const result = testStageResultList[index]?.result;
-        if (result === 'PASSED') return 'green';
-        if (result === 'FAILED') return 'red';
+        if (result === ResultEnum.PASSED) return 'green';
+        if (result === ResultEnum.FAILED) return 'red';
     }
-    if (stage.stageStatus === 'COMING_SOON') {
+    if (stage.stageStatus === StageStatusEnum.COMING_SOON) {
         return 'gray';
     }
     return '#000000';

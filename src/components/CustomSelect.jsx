@@ -1,5 +1,5 @@
 import {Select} from "@tamagui/select";
-import {Adapt, SizableText, YStack} from "tamagui";
+import {Adapt, ScrollView, SizableText, YStack} from "tamagui";
 import {useMemo} from "react";
 import {FontAwesome6} from "@expo/vector-icons";
 import {Controller} from "react-hook-form";
@@ -47,42 +47,44 @@ const CustomSelect = ({name, leftIcon, control, placeholder, items, error, disab
 
                         <Select.Content zIndex={9999}>
                             <Select.Viewport>
-                                <Select.Group padding={"$3"} gap={"$3"}>
-                                    {useMemo(
-                                        () =>
-                                            items?.map((item, index) => {
-                                                return (
-                                                    <Select.Item
-                                                        alignItems={"center"}
-                                                        width={"100%"}
-                                                        padding={"$3"}
-                                                        backgroundColor={"white"}
-                                                        borderWidth={"$0.5"}
-                                                        borderColor={value === item.id ? "deepskyblue" : "lightgray"}
-                                                        borderRadius={"$5"}
-                                                        index={index}
-                                                        key={item.id}
-                                                        value={item.id}>
-                                                        <Select.ItemText
-                                                            alignSelf={"center"}
-                                                            style={{
-                                                                fontFamily: "PoppinsRegular",
-                                                            }}
-                                                            size={"$5"}>
-                                                            {item.name} {item.region}
-                                                        </Select.ItemText>
-                                                        <Select.ItemIndicator>
-                                                            <FontAwesome6
-                                                                name={"square-check"}
-                                                                size={16}
-                                                                color={"deepskyblue"}/>
-                                                        </Select.ItemIndicator>
-                                                    </Select.Item>
-                                                )
-                                            }),
-                                        [items, value]
-                                    )}
-                                </Select.Group>
+                                <ScrollView>
+                                    <Select.Group padding={"$3"} gap={"$3"}>
+                                        {useMemo(
+                                            () =>
+                                                items?.map((item, index) => {
+                                                    return (
+                                                        <Select.Item
+                                                            alignItems={"center"}
+                                                            width={"100%"}
+                                                            padding={"$3"}
+                                                            backgroundColor={"white"}
+                                                            borderWidth={"$0.5"}
+                                                            borderColor={value === item.id ? "deepskyblue" : "lightgray"}
+                                                            borderRadius={"$5"}
+                                                            index={index}
+                                                            key={item.id}
+                                                            value={item.id}>
+                                                            <Select.ItemText
+                                                                alignSelf={"center"}
+                                                                style={{
+                                                                    fontFamily: "PoppinsRegular",
+                                                                }}
+                                                                size={"$5"}>
+                                                                {item.name} {item.region}
+                                                            </Select.ItemText>
+                                                            <Select.ItemIndicator>
+                                                                <FontAwesome6
+                                                                    name={"square-check"}
+                                                                    size={16}
+                                                                    color={"deepskyblue"}/>
+                                                            </Select.ItemIndicator>
+                                                        </Select.Item>
+                                                    )
+                                                }),
+                                            [items, value]
+                                        )}
+                                    </Select.Group>
+                                </ScrollView>
                             </Select.Viewport>
                         </Select.Content>
                     </Select>

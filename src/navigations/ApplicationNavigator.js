@@ -34,9 +34,7 @@ const ApplicationNavigator = () => {
                             }}
                             content={
                                 <YStack padding={"$3"} gap={"$2"}>
-                                    <StageColorInfo color={"yellow"} text={"Stage 1"}/>
-                                    <StageColorInfo color={"orange"} text={"Stage 2"}/>
-                                    <StageColorInfo color={"purple"} text={"Stage 3"}/>
+                                    <StageColorInfo color={"orange"} text={"Ongoing"}/>
                                     <StageColorInfo color={"red"} text={"Failed"}/>
                                     <StageColorInfo color={"green"} text={"Passed"}/>
                                     <StageColorInfo color={"deepskyblue"} text={"Onboard"}/>

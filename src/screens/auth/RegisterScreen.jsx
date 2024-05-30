@@ -15,7 +15,6 @@ import {useToastController} from "@tamagui/toast";
 import {registerTrainee} from "../../api/auth";
 import {getBatches} from "../../api/batch";
 import {getEducations} from "../../api/education";
-import {setStatus} from "../../redux/traineeSlice";
 
 const registerSchema = yup.object({
     name: yup
@@ -58,6 +57,21 @@ const InputFields = ({control, errors}) => {
         dispatch(getEducations())
     }, [dispatch]);
 
+    const extractNumber = (name) => {
+        const match = name.match(/\d+/);
+        return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const sortedBatches = batches?.slice().sort((a, b) => {
+        if (a.region < b.region) return -1;
+        if (a.region > b.region) return 1;
+        const numA = extractNumber(a.name);
+        const numB = extractNumber(b.name);
+        return numA - numB;
+    });
+
+    const sortedEducations = educations?.slice().sort((a, b) => a.value - b.value);
+
     return (
         <YStack gap={"$3"}>
             <CustomInput
@@ -98,7 +112,7 @@ const InputFields = ({control, errors}) => {
                 error={errors.educationId}
                 leftIcon={"graduation-cap"}
                 placeholder={"Select Educational Status"}
-                items={educations}
+                items={sortedEducations}
                 disabled={false}
             />
             <CustomSelect
@@ -107,7 +121,7 @@ const InputFields = ({control, errors}) => {
                 error={errors.batchId}
                 leftIcon={"school"}
                 placeholder={"Select Batch"}
-                items={batches}
+                items={sortedBatches}
                 disabled={false}
             />
             <PasswordInput
@@ -142,30 +156,35 @@ const RegisterScreen = ({navigation}) => {
     });
 
     const dispatch = useDispatch();
-    const {loading, error, status} = useSelector((state) => state.trainee);
+    const {loading} = useSelector((state) => state.auth);
 
-    useEffect(() => {
-            if (status === 201) {
+    const onSubmit = async () => {
+        const {name, mobilePhone, email, address, educationId, batchId, password} = getValues();
+
+        try {
+            const res = await dispatch(registerTrainee({
+                name,
+                mobilePhone,
+                email,
+                address,
+                educationId,
+                batchId,
+                password
+            }));
+
+            if (res.payload && res.payload.status === 201) {
                 toast.show('', {
                     message: "New Account Created!",
                     native: false,
                 });
                 navigation.navigate('Login');
-            } else if (error) {
-                toast.show('', {
-                    message: error.message,
-                    native: false,
-                });
             }
-
-            dispatch(setStatus(null))
-        }, [navigation, toast, error, status]
-    )
-
-    const onSubmit = () => {
-        const {name, mobilePhone, email, address, educationId, batchId, password} = getValues();
-
-        dispatch(registerTrainee({name, mobilePhone, email, address, educationId, batchId, password}));
+        } catch (error) {
+            toast.show('', {
+                message: error.message,
+                native: false,
+            });
+        }
     };
 
     const onClickLogin = () => {

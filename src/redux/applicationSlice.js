@@ -19,6 +19,9 @@ const applicationSlice = createSlice({
         setError: (state, action) => {
             state.error = action.payload;
         },
+        setSelectedApplication: (state, action) => {
+            state.selectedApplication = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -66,7 +69,7 @@ const applicationSlice = createSlice({
     },
 });
 
-export const {setStatus, setError} = applicationSlice.actions
+export const {setStatus, setError, setSelectedApplication} = applicationSlice.actions
 
 
 export default applicationSlice.reducer;

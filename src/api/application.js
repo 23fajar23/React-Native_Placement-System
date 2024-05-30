@@ -55,7 +55,6 @@ export const createApplication = createAsyncThunk(
         } catch (error) {
             let errorMessage
             if (error.response) {
-                console.log(error.response.status)
                 switch (error.response.status) {
                     case 400:
                         errorMessage = 'Doesnt meet batch or education requirements!';

@@ -44,7 +44,6 @@ const authSlice = createSlice({
                 state.error = null;
             })
 
-
             .addCase(registerTrainee.pending, (state) => {
                 state.loading = true;
                 state.error = null;

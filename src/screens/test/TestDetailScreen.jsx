@@ -1,4 +1,6 @@
-import {Card, ScrollView, Separator, SizableText, Spinner, XStack, YStack} from "tamagui";
+import React, {useEffect, useState} from "react";
+import {ScrollView, RefreshControl} from "react-native";
+import {Card, Separator, SizableText, Spinner, XStack, YStack} from "tamagui";
 import LogoCard from "../../components/LogoCard";
 import Icon from "../../../assets/icon.png";
 import NoteChip from "../../components/NoteChip";
@@ -6,47 +8,38 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import CustomAccordion from "../../components/CustomAccordion";
 import QuotaRow from "../../components/QuotaRow";
 import CustomSheet from "../../components/CustomSheet";
-import React, {useEffect, useState} from "react";
-import {useToastController} from "@tamagui/toast";
 import ConfirmationContent from "../../components/ConfirmationContent";
 import {useDispatch, useSelector} from "react-redux";
 import {getTestById} from "../../api/test";
 import {formatDate} from "../../utils/formatDate";
 import {createApplication} from "../../api/application";
 import * as SecureStore from "expo-secure-store";
+import {useToastController} from "@tamagui/toast";
+import {setSelectedTest} from "../../redux/testSlice";
 import {setError, setStatus} from "../../redux/applicationSlice";
 
 const TestDetailScreen = ({route, navigation}) => {
-    const {testId} = route.params;
-    const [openSheet, setOpenSheet] = useState(false)
-    const toast = useToastController()
+    const {test} = route.params;
+    const testId = test.id;
+    const [openSheet, setOpenSheet] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
+    const toast = useToastController();
     const dispatch = useDispatch();
-    const {selectedTest, loading: loadingTest} = useSelector((state) => state.test);
-    const {loading: loadingApply, status, error} = useSelector((state) => state.application);
+    const {selectedTest} = useSelector((state) => state.test);
+    const {loading: loadingApply, error} = useSelector((state) => state.application);
 
     useEffect(() => {
+        dispatch(setStatus(null))
         dispatch(setError(null))
 
-        dispatch(getTestById(testId));
-    }, [dispatch, testId]);
+        dispatch(setSelectedTest(test));
+    }, [dispatch, test]);
 
-    useEffect(() => {
-            if (status === 200) {
-                toast.show('', {
-                    message: 'Successfully Applied Test!',
-                    native: false,
-                });
-                navigation.navigate('InitialNavigator', {screen: 'Application'});
-            } else if (error) {
-                toast.show('', {
-                    message: error.message,
-                    native: false,
-                });
-            }
-
-            dispatch(setStatus(null))
-        }, [navigation, toast, error, status, dispatch]
-    )
+    const onRefresh = async () => {
+        setRefreshing(true);
+        await dispatch(getTestById(testId));
+        setRefreshing(false);
+    };
 
     const renderQuotaRows = () => {
         const quota = selectedTest.stages[0].quotas[0];
@@ -79,29 +72,39 @@ const TestDetailScreen = ({route, navigation}) => {
         const customerId = await SecureStore.getItemAsync('userId');
 
         if (customerId) {
-            console.log("userId", customerId)
-            console.log("testId", testId)
             const applicationData = {customerId, testId};
-            dispatch(createApplication(applicationData));
-            setOpenSheet(false);
+            const res = await dispatch(createApplication(applicationData));
+
+            if (res.payload && res.payload.status === 200) {
+                toast.show('', {
+                    message: 'Successfully Applied Test!',
+                    native: false,
+                });
+                navigation.navigate('InitialNavigator', {screen: 'Application'});
+            } else if (error) {
+                toast.show('', {
+                    message: error.message,
+                    native: false,
+                });
+            }
         } else {
             toast.show('', {
                 message: "Trainee ID Not Found!",
                 native: false,
             });
-            setOpenSheet(false);
         }
     };
 
     return (
         <>
-            {loadingTest || !selectedTest ? (
-                <YStack flex={1} backgroundColor={"white"} alignItems={"center"} justifyContent={"center"}>
-                    <Spinner size={"large"} color="lightgray"/>
-                </YStack>
-            ) : (
+            {selectedTest &&
                 <>
-                    <ScrollView backgroundColor={"white"} showsVerticalScrollIndicator={false}>
+                    <ScrollView
+                        backgroundColor={"white"}
+                        showsVerticalScrollIndicator={false}
+                        refreshControl={
+                            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+                        }>
                         <YStack
                             flex={1}
                             backgroundColor={"white"}
@@ -232,16 +235,16 @@ const TestDetailScreen = ({route, navigation}) => {
                                 buttonText={"Yes, Apply"}
                                 onPressSecondary={() => setOpenSheet(false)}
                                 onPressPrimary={() => {
-                                    handleApply()
-                                    setOpenSheet(false)
+                                    handleApply();
+                                    setOpenSheet(false);
                                 }}
                             />
                         }
                     />
                 </>
-            )}
+            }
         </>
     )
 }
 
-export default TestDetailScreen
+export default TestDetailScreen;
