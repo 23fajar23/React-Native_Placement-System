@@ -36,7 +36,7 @@ const ProfileScreen = ({navigation}) => {
                     <Avatar flex={1} circular size={"$7"}>
                         <Avatar.Image
                             accessibilityLabel="ProfilePicture"
-                            src="https://images.unsplash.com/photo-1548142813-c348350df52b?&w=150&h=150&dpr=2&q=80"
+                            src="https://i.pinimg.com/736x/ff/a0/9a/ffa09aec412db3f54deadf1b3781de2a.jpg"
                         />
                     </Avatar>
                     <YStack flex={5} gap={"$1"}>

@@ -121,7 +121,7 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                                 title={stage.nameStage}
                                                 date={stage.dateTime}
                                                 currentStage={(stage === currentStage) && finalResult !== ResultEnum.PASSED}/>
-                                            {((index !== selectedApplication.test.stages.length - 1 && previousStageFailed) || finalResult === ResultEnum.PASSED) && (
+                                            {(((index !== selectedApplication.test.stages.length - 1) && previousStageFailed) || finalResult === ResultEnum.PASSED) && (
                                                 <FontAwesome6 name={"angle-down"} color={"black"} size={24}/>
                                             )}
                                         </React.Fragment>
@@ -133,7 +133,7 @@ const ApplicationDetailScreen = ({route, navigation}) => {
                                         textColor={"deepskyblue"}
                                         title={"ONBOARD"}
                                         date={"-"}
-                                        currentStage={false}/>
+                                        currentStage={() => getCurrentStage(selectedApplication.test.stages)}/>
                                 )}
                             </YStack>
                         </YStack>

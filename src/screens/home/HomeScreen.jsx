@@ -42,14 +42,14 @@ const HomeScreen = ({navigation}) => {
     const latestTests = tests.slice(-5);
     const reversedTests = [...latestTests].reverse();
 
-    const activeApplicationsCount = traineeApplications.filter(application => application.finalResult === null).length;
+    const activeApplicationsCount = traineeApplications.filter(app => app.application.finalResult === null).length;
 
     const handleToTestList = () => {
         navigation.navigate('InitialNavigator', {screen: 'Test'});
     };
 
-    const handlePressItem = (testId) => {
-        navigation.navigate('TestNavigator', {screen: 'TestDetail', params: {testId}});
+    const handlePressItem = (test) => {
+        navigation.navigate('TestNavigator', {screen: 'TestDetail', params: {test}});
     };
 
     const handleToggleBookmark = (id) => {

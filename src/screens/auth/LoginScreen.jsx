@@ -138,7 +138,7 @@ const LoginScreen = ({navigation}) => {
     };
 
     return (
-        <ScrollView backgroundColor={"white"}flex={1} showsVerticalScrollIndicator={false}>
+        <ScrollView backgroundColor={"white"} flex={1} showsVerticalScrollIndicator={false}>
             <YStack flex={1} backgroundColor={"white"} gap={"$5"} alignItems={'center'} padding={"$3"}>
                 <AuthHeader logo={Logo} title={"Login to Your Account"}/>
 

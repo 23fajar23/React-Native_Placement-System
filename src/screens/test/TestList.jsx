@@ -33,6 +33,7 @@ const TestList = ({handlePressItem}) => {
                     data={reversedTests}
                     renderItem={({item}) => (
                         <TestItem
+                            key={item.id}
                             item={item}
                             handlePressItem={handlePressItem}
                             handleToggleBookmark={handleToggleBookmark}
